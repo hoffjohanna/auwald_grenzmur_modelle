@@ -213,7 +213,7 @@ footer img {
 
 
 
-    // =====  WMS-Overlays: SDM und Risikokarten ===== ***LAYER_STEP1
+    // =====  WMS-Overlays: SDM und Risikokarten ===== 
     const WMS_URL = 'https://gis.stmk.gv.at/arcgis/services/OGD/ALSHoeheninformation_1m_UTM33N/MapServer/WMSServer';
 
     // Oberflächenschummerung
@@ -272,25 +272,39 @@ footer img {
       zIndex: 11
     });
 	
-	// === NEU: Hirschkäfer (WMS) ===
+	// === NEU: Hirschkäfer (WMS) === ***LAYER_STEP1
 const lyrHirschkaefer = new ol.layer.Tile({
   source: new ol.source.TileWMS({
     url: 'https://inspire.lfrz.gv.at/000602/wms',           
     params: {
-      'LAYERS': '<000602:Lucanus_Modell_cont>',      
-      // 'STYLES': '<optional_style>',
+      'LAYERS': '000602:Lucanus_Modell_cont',      
       'FORMAT': 'image/png',
       'TRANSPARENT': true,
       'VERSION': '1.3.0',
-      'TILED': true
-    },
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
     crossOrigin: 'anonymous'
   }),
   visible: false,
   opacity: 0.8,
   zIndex: 11
 });
-	
+lyrHirschkaefer.setVisible(true);
+
+
+// Debug: Fehlermeldungen im Browser-Console-Log
+lyrHirschkaefer.getSource().on('tileloaderror', (e) => {
+  console.error('Hirschkäfer WMS tileloaderror', e);
+});
+lyrHirschkaefer.getSource().on('tileloadstart', (e) => {
+  console.log('Hirschkäfer WMS tile URL:', e.tile.getKey()); // bei Bedarf aktivieren
+});
+
+
+
+
+
 	
 
     // Overlays zur Karte hinzufügen ***LAYER_STEP2
@@ -316,7 +330,7 @@ legendDiv.innerHTML = `
   <div>
   <img src="${legendUrl}" alt="Legende: Artvorkommen – Wahrscheinlichkeit">
 `;
-legendDiv.style.display = 'none'; // anfangs ausgeblendet
+//legendDiv.style.display = 'none'; // anfangs ausgeblendet
 document.getElementById('map').appendChild(legendDiv);	
 	
 	
@@ -372,7 +386,11 @@ function createPanel({ title, defaultOpen = true }) {
   return { panel, body };
 }
 
-// Panel 1: Verbreitungskarten (oben)
+
+
+
+
+// Panel 1: Verbreitungskarten (oben) 
 const { panel: panelV, body: bodyV } = createPanel({
   title: 'Verbreitungskarten',
   defaultOpen: true
@@ -385,6 +403,23 @@ rowBombina.innerHTML = `
   <input type="checkbox" id="chk_bombina"> Gelbbauchunke
 `;
 bodyV.appendChild(rowBombina);
+
+//Checkbox Lucanus ***LAYER_STEP3
+const rowHirsch = document.createElement('label');
+rowHirsch.className = 'panel-row';
+rowHirsch.innerHTML = `
+  <input type="checkbox" id="chk_hirsch"> Hirschkäfer
+`;
+bodyV.appendChild(rowHirsch);
+
+
+
+
+
+
+
+
+
 
 // Panel 2: Risikokarten (darunter)
 const { panel: panelR, body: bodyR } = createPanel({
@@ -406,6 +441,9 @@ rowHoehe.innerHTML = `
 `;
 bodyR.appendChild(rowHoehe);
 
+
+
+
 // Beide Panels in den Stack einfügen
 stack.appendChild(panelV); //Verbreitung
 stack.appendChild(panelR); //Risiko
@@ -413,17 +451,28 @@ stack.appendChild(panelR); //Risiko
 
 
 
-// Checkbox-Referenzen & Logik ***
+// Checkbox-Referenzen & Logik ***STEP4
 const chkBombina = bodyV.querySelector('#chk_bombina');
 const chkSchummerung = bodyR.querySelector('#chk_schummerung');
 const chkHoeheProj = bodyR.querySelector('#chk_hoeheproj');
+const chkHirsch = bodyV.querySelector('#chk_hirsch');
 
+
+
+
+
+
+//Set Visibility ***STEP5
 chkBombina.addEventListener('change', () => {
   lyrBombina_const.setVisible(chkBombina.checked);
-    legendDiv.style.display = chkBombina.checked ? 'block' : 'none'; 
+    //legendDiv.style.display = chkBombina.checked ? 'block' : 'none'; 
 	// === LEGENDE Verbreitungskarten ===
 });
 
+chkHirsch.addEventListener('change', () => {
+  lyrHirschkaefer.setVisible(chkHirsch.checked);
+
+});
 
 
 
@@ -435,8 +484,9 @@ chkHoeheProj.addEventListener('change', () => {
 });
 
 // Optional: Defaults setzen (z. B. beim Laden aktivieren)
-chkBombina.checked = true;
-lyrBombina_const.setVisible(true);
+//chkBombina.checked = true;
+chkHirsch.checked = true;
+lyrHirschkaefer.setVisible(true);
 legendDiv.style.display = 'block';
 /// lyrSchummerung.setVisible(true);  chkSchummerung.checked = true;
 /// lyrHoeheProj.setVisible(true);    chkHoeheProj.checked = true;
