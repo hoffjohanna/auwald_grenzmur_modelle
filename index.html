@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <title> Zeigerarten und Risikofaktoren im Auwald an der Grenzmur</title>
+  <title>Zeigerarten und Risikofaktoren im Auwald an der Grenzmur</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- OpenLayers -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@7.5.2/ol.css">
@@ -13,18 +13,18 @@
       text-align:center; padding:12px; background:#f0f0f0; border-bottom:1px solid #ccc;
       font-size:18px; font-weight:600;
     }
-    #map { height: calc(100% - 100px); position: relative; }
+    #map { height: calc(95% - 100px); position: relative; }
     
 	
 footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px 14px;
+  gap: 5px;
+  padding: 10px 10px;
   background: #f8f8f8;
   border-top: 1px solid #ddd;
-  font-size: 14px;
+  font-size: 11px;
 }
 
 .footer-logos {
@@ -34,7 +34,7 @@ footer {
 }
 
 footer img {
-  height: 36px;        /* einheitliche Höhe */
+  height: 45px;        /* einheitliche Höhe */
   width: auto;         /* Proportionen beibehalten */
   object-fit: contain; /* falls Logo sehr breit/hoch ist */
 }
@@ -60,14 +60,29 @@ footer img {
   <footer>
   <div class="footer-logos">
     <a href="https://www.bfw.gv.at/" target="_blank" rel="noopener">
-      <img src="bfw_black.jpg" alt="BFW" loading="lazy" height="36">
+      <img src="bfw_black.jpg" alt="BFW" loading="lazy" height="60">
     </a>
-    <a href="https://www.oekoteam.at/de/team-menu.html" target="_blank" rel="noopener">
-      <img src="https://www.oekoteam.at/images/oekologos/oekoteamlogtransp210.png" alt="Ökoteam" loading="lazy" height="36">
+    <a href="https://www.oekoteam.at/de/" target="_blank" rel="noopener">
+      <img src="https://www.oekoteam.at/images/oekologos/oekoteamlogtransp210.png" alt="Ökoteam" loading="lazy" height="60">
     </a>
+    <a href="https://www.nukv.at/" target="_blank" rel="noopener">
+      <img src="NUKV_Logo_basic.png" alt="NUKV_Logo_basic" loading="lazy" height="60">
+    </a>    
+	<a href="https://www.bmluk.gv.at/" target="_blank" rel="noopener">
+      <img src="BM.jpg" alt="BM" loading="lazy" height="60">
+    </a>
+    <a href=" " target="_blank" rel="noopener">
+      <img src="Europaeischen_Union_POS.jpg" alt="Europaeischen_Union_POS" loading="lazy" height="60">
+    </a>
+
   </div>
-  <div class="footer-text"> Diese Karten sind im Rahmen des Projektes Auwaldinitiative erstellt worden </div>
-</footer>
+<div class="footer-text"> 
+<strong> Auen-Renaturierung im Europaschutzgebiet Steirische Grenzmur  </strong> <br>
+    <strong>Durchführung:</strong> ÖKOTEAM & BFW  <br>
+  <strong>Förderung:</strong> Biodiversitätsfonds des BMLUK<br>
+  <strong>Projektträger:</strong> NUKV Steiermark <br>
+
+</div>
 
   <script>
     // ===== Orthofoto-Block =====
@@ -167,6 +182,9 @@ footer img {
 	
 	
 
+
+
+
     // ===== Auswahl-Panel mit zwei Checkboxen dynamisch erstellen =====
     const panel = document.createElement('div');
     panel.style.cssText = 'position:absolute;top:12px;left:12px;z-index:1000;background:rgba(255,255,255,.95);border:1px solid #e5e7eb;border-radius:10px;padding:8px 10px;box-shadow:0 6px 16px rgba(0,0,0,.08);font:14px system-ui,Arial;';
@@ -212,6 +230,4 @@ footer img {
     // lyrHoeheProj.setVisible(true);   chkHoeheProj.checked   = true;
   </script>
 </body>
-
 </html>
-
