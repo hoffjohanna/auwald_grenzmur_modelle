@@ -258,12 +258,12 @@ footer img {
       source: new ol.source.TileWMS({
         url: 'https://inspire.lfrz.gv.at/000602/wms',
         params: {
-          'LAYERS': '000602:Bombina_Modell_cont',
+          'LAYERS': '000602:Bombina_Modell_cont',//ändern
           'FORMAT': 'image/png',
           'TRANSPARENT': true,
           'VERSION': '1.3.0',
           'TILED': true,
-		  'STYLES': 'Bmbn_BY_style' // definierte Legendarstellung
+		  //'STYLES': 'Bmbn_BY_style' // definierte Legendarstellung
         },
         crossOrigin: 'anonymous'
       }),
@@ -271,13 +271,14 @@ footer img {
       opacity: 0.8,
       zIndex: 11
     });
-	
-	// === NEU: Hirschkäfer (WMS) === ***LAYER_STEP1
+
+
+// === NEU: Hirschkäfer (WMS) === ***LAYER_STEP1
 const lyrHirschkaefer = new ol.layer.Tile({
   source: new ol.source.TileWMS({
     url: 'https://inspire.lfrz.gv.at/000602/wms',           
     params: {
-      'LAYERS': '000602:Lucanus_Modell_cont',      
+      'LAYERS': '000602:Lucanus_Modell_cont',      //ändern
       'FORMAT': 'image/png',
       'TRANSPARENT': true,
       'VERSION': '1.3.0',
@@ -292,27 +293,106 @@ const lyrHirschkaefer = new ol.layer.Tile({
 });
 lyrHirschkaefer.setVisible(true);
 
+//Scharlachkäfer (WMS)
+const lyrScharlachkaefer = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    params: {
+      'LAYERS': '000602:Cucujus_Modell_cont',      //ändern
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//Mittelspecht (WMS)
+const lyrMittelspecht = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    params: {
+      'LAYERS': '000602:Leiopicus_Modell_cont',      //ändern
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+
+//Grauspecht
+const lyrGrauspecht = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    params: {
+      'LAYERS': '000602:Picus_Modell_cont',      //ändern
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//Kammmolch
+const lyrKammmolch = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    params: {
+      'LAYERS': '000602:Triturus_Modell_cont',      //ändern
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
 
 // Debug: Fehlermeldungen im Browser-Console-Log
-lyrHirschkaefer.getSource().on('tileloaderror', (e) => {
-  console.error('Hirschkäfer WMS tileloaderror', e);
-});
-lyrHirschkaefer.getSource().on('tileloadstart', (e) => {
-  console.log('Hirschkäfer WMS tile URL:', e.tile.getKey()); // bei Bedarf aktivieren
-});
+//lyrHirschkaefer.getSource().on('tileloaderror', (e) => {
+//  console.error('Hirschkäfer WMS tileloaderror', e);
+//});
+//lyrHirschkaefer.getSource().on('tileloadstart', (e) => {
+//  console.log('Hirschkäfer WMS tile URL:', e.tile.getKey()); // bei Bedarf aktivieren
+//});
 
 
 
 
 
-	
-
-    // Overlays zur Karte hinzufügen ***LAYER_STEP2
+	 // Overlays zur Karte hinzufügen ***LAYER_STEP2
     map.addLayer(lyrSchummerung);
     map.addLayer(lyrHoeheProj);
 	map.addLayer(lyrBombina_const);
 	map.addLayer(lyrHirschkaefer);
-	
+	map.addLayer(lyrScharlachkaefer);
+	map.addLayer(lyrMittelspecht);	
+	map.addLayer(lyrGrauspecht);	
+	map.addLayer(lyrKammmolch);
+
 	
 	
 	
@@ -390,19 +470,13 @@ function createPanel({ title, defaultOpen = true }) {
 
 
 
-// Panel 1: Verbreitungskarten (oben) 
+// Panel 1: Verbreitungskarten (oben) ---Reihenfolge bestimmen
 const { panel: panelV, body: bodyV } = createPanel({
   title: 'Verbreitungskarten',
   defaultOpen: true
 });
 
-// Checkbox für Bombina (weitere Layer später ergänzen)
-const rowBombina = document.createElement('label');
-rowBombina.className = 'panel-row';
-rowBombina.innerHTML = `
-  <input type="checkbox" id="chk_bombina"> Gelbbauchunke
-`;
-bodyV.appendChild(rowBombina);
+
 
 //Checkbox Lucanus ***LAYER_STEP3
 const rowHirsch = document.createElement('label');
@@ -412,8 +486,47 @@ rowHirsch.innerHTML = `
 `;
 bodyV.appendChild(rowHirsch);
 
+//Checkbox cucujus ***LAYER_STEP3
+const rowScharlachkaefer = document.createElement('label');
+rowScharlachkaefer.className = 'panel-row';
+rowScharlachkaefer.innerHTML = `
+  <input type="checkbox" id="chk_Scharlachkaefer">Scharlachkaefer
+`;
+bodyV.appendChild(rowScharlachkaefer);
+
+//Checkbox Leiopicus ***LAYER_STEP3
+const rowMittelspecht = document.createElement('label');
+rowMittelspecht.className = 'panel-row';
+rowMittelspecht.innerHTML = `
+  <input type="checkbox" id="chk_Mittelspecht"> Mittelspecht
+`;
+bodyV.appendChild(rowMittelspecht);
+
+//Checkbox Picus ***LAYER_STEP3
+const rowGrauspecht = document.createElement('label');
+rowGrauspecht.className = 'panel-row';
+rowGrauspecht.innerHTML = `
+  <input type="checkbox" id="chk_Grauspecht"> Grauspecht
+`;
+bodyV.appendChild(rowGrauspecht);
 
 
+//Checkbox Triturus ***LAYER_STEP3
+const rowKammmolch = document.createElement('label');
+rowKammmolch.className = 'panel-row';
+rowKammmolch.innerHTML = `
+  <input type="checkbox" id="chk_Kammmolch"> Kammmolch
+`;
+bodyV.appendChild(rowKammmolch);
+
+
+// Checkbox für Bombina (weitere Layer später ergänzen)
+const rowBombina = document.createElement('label');
+rowBombina.className = 'panel-row';
+rowBombina.innerHTML = `
+  <input type="checkbox" id="chk_bombina"> Gelbbauchunke
+`;
+bodyV.appendChild(rowBombina);
 
 
 
@@ -453,9 +566,14 @@ stack.appendChild(panelR); //Risiko
 
 // Checkbox-Referenzen & Logik ***STEP4
 const chkBombina = bodyV.querySelector('#chk_bombina');
+const chkHirsch = bodyV.querySelector('#chk_hirsch');
+const chkScharlachkaefer = bodyV.querySelector('#chk_Scharlachkaefer');
+const chkMittelspecht= bodyV.querySelector('#chk_Mittelspecht');
+const chkGrauspecht = bodyV.querySelector('#chk_Grauspecht');
+const chkKammmolch = bodyV.querySelector('#chk_Kammmolch');
+
 const chkSchummerung = bodyR.querySelector('#chk_schummerung');
 const chkHoeheProj = bodyR.querySelector('#chk_hoeheproj');
-const chkHirsch = bodyV.querySelector('#chk_hirsch');
 
 
 
@@ -471,6 +589,26 @@ chkBombina.addEventListener('change', () => {
 
 chkHirsch.addEventListener('change', () => {
   lyrHirschkaefer.setVisible(chkHirsch.checked);
+
+});
+
+chkScharlachkaefer.addEventListener('change', () => {
+  lyrScharlachkaefer.setVisible(chkScharlachkaefer.checked);
+
+});
+
+chkMittelspecht.addEventListener('change', () => {
+  lyrMittelspecht.setVisible(chkMittelspecht.checked);
+
+});
+
+chkGrauspecht.addEventListener('change', () => {
+  lyrGrauspecht.setVisible(chkGrauspecht.checked);
+
+});
+
+chkKammmolch.addEventListener('change', () => {
+  lyrKammmolch.setVisible(chkKammmolch.checked);
 
 });
 
