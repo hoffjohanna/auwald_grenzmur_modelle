@@ -51,6 +51,101 @@ footer img {
 	
 	/* Verhindert die Deprecation-Warnung für OL-Canvas */
 	#map canvas { overflow: hidden !important; }
+/* === PANELS: NEU hinzugefügt === */
+.control-stack {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-panel {
+  background: rgba(255,255,255,.95);
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  overflow: hidden;
+  min-width: 260px;
+  font: 14px system-ui, Arial, sans-serif;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+}
+
+.panel-header:hover {
+  background: #f6f6f6;
+}
+
+.panel-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-toggle {
+  font-size: 18px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.panel-body {
+  padding: 8px 10px;
+  border-top: 1px solid #eee;
+}
+
+.panel-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+/* einheitliche Checkbox-Größe (optional) */
+.panel-body input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+
+
+
+
+/* === LEGENDE: Verbreitungskarten === */
+.legend {
+  position: absolute;
+  right: 12px;
+  bottom: 80px;       /* oberhalb des Footers */
+  z-index: 1001;
+  background: rgba(255,255,255,.95);
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  font: 14px system-ui, Arial, sans-serif;
+  max-width: 280px;
+}
+.legend .legend-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.legend img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
 
   </style>
 </head>
@@ -69,7 +164,7 @@ footer img {
       <img src="NUKV_Logo_basic.png" alt="NUKV_Logo_basic" loading="lazy" height="60">
     </a>    
 	<a href="https://www.bmluk.gv.at/" target="_blank" rel="noopener">
-      <img src="BMLUK_Logo_cmyk.png" alt="BM" loading="lazy" height="60">
+      <img src="BMLUK_Logo_cmyk.png" alt="BMLUK" loading="lazy" height="60">
     </a>
     <a href=" " target="_blank" rel="noopener">
       <img src="Europaeischen_Union_POS.jpg" alt="Europaeischen_Union_POS" loading="lazy" height="60">
@@ -79,8 +174,9 @@ footer img {
 <div class="footer-text"> 
 <strong> Auen-Renaturierung im Europaschutzgebiet Steirische Grenzmur  </strong> <br>
     <strong>Durchführung:</strong> ÖKOTEAM & BFW  <br>
-  <strong>Förderung:</strong> Biodiversitätsfonds des BMLUK<br>
-  <strong>Projektträger:</strong> NUKV Steiermark <br>
+    <strong>Projektträger:</strong> NUKV Steiermark <br>
+	<strong>Förderung:</strong> Biodiversitätsfonds des BMLUK<br>
+
 
 </div>
 
@@ -117,7 +213,7 @@ footer img {
 
 
 
-    // =====  WMS-Overlays: SDM und Risikokarten =====
+    // =====  WMS-Overlays: SDM und Risikokarten ===== ***LAYER_STEP1
     const WMS_URL = 'https://gis.stmk.gv.at/arcgis/services/OGD/ALSHoeheninformation_1m_UTM33N/MapServer/WMSServer';
 
     // Oberflächenschummerung
@@ -166,7 +262,8 @@ footer img {
           'FORMAT': 'image/png',
           'TRANSPARENT': true,
           'VERSION': '1.3.0',
-          'TILED': true
+          'TILED': true,
+		  'STYLES': 'Bmbn_BY_style' // definierte Legendarstellung
         },
         crossOrigin: 'anonymous'
       }),
@@ -174,47 +271,177 @@ footer img {
       opacity: 0.8,
       zIndex: 11
     });
+	
+	// === NEU: Hirschkäfer (WMS) ===
+const lyrHirschkaefer = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    params: {
+      'LAYERS': '<000602:Lucanus_Modell_cont>',      
+      // 'STYLES': '<optional_style>',
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true
+    },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+	
+	
 
-    // Overlays zur Karte hinzufügen
+    // Overlays zur Karte hinzufügen ***LAYER_STEP2
     map.addLayer(lyrSchummerung);
     map.addLayer(lyrHoeheProj);
 	map.addLayer(lyrBombina_const);
+	map.addLayer(lyrHirschkaefer);
 	
 	
+	
+	
+	
+	
+	
+	
+// === LEGENDE: NEU Vebreitungskarten ===
+const legendUrl = 'https://inspire.lfrz.gv.at/000602/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Bombina_Modell_cont&style=Bmbn_BY_style';
+
+const legendDiv = document.createElement('div');
+legendDiv.className = 'legend';
+legendDiv.innerHTML = `
+  <div class="legend-title">Verbreitungs-<br>Wahrscheinlichkeit
+  <div>
+  <img src="${legendUrl}" alt="Legende: Artvorkommen – Wahrscheinlichkeit">
+`;
+legendDiv.style.display = 'none'; // anfangs ausgeblendet
+document.getElementById('map').appendChild(legendDiv);	
+	
+	
+	
+	
+// === PANELS: 2 separate zum Ausklappen hinzugefügt  ===
+
+// Container für beide Panels (gestapelt)
+const stack = document.createElement('div');
+stack.className = 'control-stack';
+document.getElementById('map').appendChild(stack);
+
+// Hilfsfunktion: kollabierbares Panel erzeugen
+function createPanel({ title, defaultOpen = true }) {
+  const panel = document.createElement('div');
+  panel.className = 'control-panel';
+
+  const header = document.createElement('div');
+  header.className = 'panel-header';
+  header.setAttribute('role', 'button');
+  header.setAttribute('tabindex', '0');
+  header.setAttribute('aria-expanded', String(defaultOpen));
+
+  const titleEl = document.createElement('div');
+  titleEl.className = 'panel-title';
+  titleEl.textContent = title;
+
+  const toggle = document.createElement('div');
+  toggle.className = 'panel-toggle';
+  toggle.textContent = defaultOpen ? '▾' : '▸';
+
+  const body = document.createElement('div');
+  body.className = 'panel-body';
+  if (!defaultOpen) body.style.display = 'none';
+
+  header.addEventListener('click', () => {
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    toggle.textContent = open ? '▸' : '▾';
+    header.setAttribute('aria-expanded', String(!open));
+  });
+  header.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      header.click();
+    }
+  });
+
+  header.appendChild(titleEl);
+  header.appendChild(toggle);
+  panel.appendChild(header);
+  panel.appendChild(body);
+  return { panel, body };
+}
+
+// Panel 1: Verbreitungskarten (oben)
+const { panel: panelV, body: bodyV } = createPanel({
+  title: 'Verbreitungskarten',
+  defaultOpen: true
+});
+
+// Checkbox für Bombina (weitere Layer später ergänzen)
+const rowBombina = document.createElement('label');
+rowBombina.className = 'panel-row';
+rowBombina.innerHTML = `
+  <input type="checkbox" id="chk_bombina"> Gelbbauchunke
+`;
+bodyV.appendChild(rowBombina);
+
+// Panel 2: Risikokarten (darunter)
+const { panel: panelR, body: bodyR } = createPanel({
+  title: 'Risikokarten',
+  defaultOpen: true
+});
+
+const rowSchummer = document.createElement('label');
+rowSchummer.className = 'panel-row';
+rowSchummer.innerHTML = `
+  <input type="checkbox" id="chk_schummerung"> Oberflächenschummerung (Steiermark)
+`;
+bodyR.appendChild(rowSchummer);
+
+const rowHoehe = document.createElement('label');
+rowHoehe.className = 'panel-row';
+rowHoehe.innerHTML = `
+  <input type="checkbox" id="chk_hoeheproj"> Oberflächenhöhe Projekte
+`;
+bodyR.appendChild(rowHoehe);
+
+// Beide Panels in den Stack einfügen
+stack.appendChild(panelV); //Verbreitung
+stack.appendChild(panelR); //Risiko
 
 
 
 
-    // ===== Auswahl-Panel mit zwei Checkboxen dynamisch erstellen =====
-    const panel = document.createElement('div');
-    panel.style.cssText = 'position:absolute;top:12px;left:12px;z-index:1000;background:rgba(255,255,255,.95);border:1px solid #e5e7eb;border-radius:10px;padding:8px 10px;box-shadow:0 6px 16px rgba(0,0,0,.08);font:14px system-ui,Arial;';
-    panel.innerHTML = `
-      <div style="font-weight:600;margin-bottom:6px;">Verbreitungskarten</div>
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:4px 0;">
-        <input type="checkbox" id="chk_schummerung"> Oberflächenschummerung (Steiermark)
-      </label>
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:4px 0;">
-        <input type="checkbox" id="chk_hoeheproj"> Oberflaechenhoehe_Projekte
-      </label>
-	    <input type="checkbox" id="chk_bombina"> Gelbbauchunke
-      </label>
-    `;
-    document.getElementById('map').appendChild(panel);
+// Checkbox-Referenzen & Logik ***
+const chkBombina = bodyV.querySelector('#chk_bombina');
+const chkSchummerung = bodyR.querySelector('#chk_schummerung');
+const chkHoeheProj = bodyR.querySelector('#chk_hoeheproj');
 
-    // Checkbox-Logik
-    const chkSchummerung = panel.querySelector('#chk_schummerung');
-    const chkHoeheProj   = panel.querySelector('#chk_hoeheproj');
-	const chkBombina   = panel.querySelector('#chk_bombina');
+chkBombina.addEventListener('change', () => {
+  lyrBombina_const.setVisible(chkBombina.checked);
+    legendDiv.style.display = chkBombina.checked ? 'block' : 'none'; 
+	// === LEGENDE Verbreitungskarten ===
+});
 
-    chkSchummerung.addEventListener('change', () => {
-      lyrSchummerung.setVisible(chkSchummerung.checked);
-    });
-    chkHoeheProj.addEventListener('change', () => {
-      lyrHoeheProj.setVisible(chkHoeheProj.checked);
-    });
-	chkBombina.addEventListener('change', () => {
-      lyrBombina_const.setVisible(chkBombina.checked);
-    });
+
+
+
+chkSchummerung.addEventListener('change', () => {
+  lyrSchummerung.setVisible(chkSchummerung.checked);
+});
+chkHoeheProj.addEventListener('change', () => {
+  lyrHoeheProj.setVisible(chkHoeheProj.checked);
+});
+
+// Optional: Defaults setzen (z. B. beim Laden aktivieren)
+chkBombina.checked = true;
+lyrBombina_const.setVisible(true);
+legendDiv.style.display = 'block';
+/// lyrSchummerung.setVisible(true);  chkSchummerung.checked = true;
+/// lyrHoeheProj.setVisible(true);    chkHoeheProj.checked = true;
+	
+	
 	
 	
 	
@@ -225,11 +452,6 @@ footer img {
     // Maßstabsleiste hinzufügen
     map.addControl(new ol.control.ScaleLine());
 
-    // Optional: einen Overlay-Layer standardmäßig aktivieren:
-    lyrSchummerung.setVisible(true); chkSchummerung.checked = true;
-    // lyrHoeheProj.setVisible(true);   chkHoeheProj.checked   = true;
   </script>
 </body>
 </html>
-
-
