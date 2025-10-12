@@ -256,7 +256,7 @@ footer img {
 	// Bombina Verteilung 
     const lyrBombina_const = new ol.layer.Tile({
       source: new ol.source.TileWMS({
-        url: 'https://inspire.lfrz.gv.at/000602/wms',
+        url: 'https://inspire.lfrz.gv.at/000607/wms',
         params: {
           'LAYERS': '000602:Bombina_Modell_cont',//ändern
           'FORMAT': 'image/png',
@@ -276,7 +276,7 @@ footer img {
 // === NEU: Hirschkäfer (WMS) === ***LAYER_STEP1
 const lyrHirschkaefer = new ol.layer.Tile({
   source: new ol.source.TileWMS({
-    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
       'LAYERS': '000602:Lucanus_Modell_cont',      //ändern
       'FORMAT': 'image/png',
@@ -296,7 +296,7 @@ lyrHirschkaefer.setVisible(true);
 //Scharlachkäfer (WMS)
 const lyrScharlachkaefer = new ol.layer.Tile({
   source: new ol.source.TileWMS({
-    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
       'LAYERS': '000602:Cucujus_Modell_cont',      //ändern
       'FORMAT': 'image/png',
@@ -315,7 +315,7 @@ const lyrScharlachkaefer = new ol.layer.Tile({
 //Mittelspecht (WMS)
 const lyrMittelspecht = new ol.layer.Tile({
   source: new ol.source.TileWMS({
-    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
       'LAYERS': '000602:Leiopicus_Modell_cont',      //ändern
       'FORMAT': 'image/png',
@@ -335,7 +335,7 @@ const lyrMittelspecht = new ol.layer.Tile({
 //Grauspecht
 const lyrGrauspecht = new ol.layer.Tile({
   source: new ol.source.TileWMS({
-    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
       'LAYERS': '000602:Picus_Modell_cont',      //ändern
       'FORMAT': 'image/png',
@@ -354,7 +354,7 @@ const lyrGrauspecht = new ol.layer.Tile({
 //Kammmolch
 const lyrKammmolch = new ol.layer.Tile({
   source: new ol.source.TileWMS({
-    url: 'https://inspire.lfrz.gv.at/000602/wms',           
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
       'LAYERS': '000602:Triturus_Modell_cont',      //ändern
       'FORMAT': 'image/png',
@@ -643,3 +643,4 @@ legendDiv.style.display = 'block';
   </script>
 </body>
 </html>
+
