@@ -124,8 +124,6 @@ footer img {
 /* === LEGENDE: Verbreitungskarten === */
 .legend {
   position: absolute;
-  right: 12px;
-  bottom: 80px;       /* oberhalb des Footers */
   z-index: 1001;
   background: rgba(255,255,255,.95);
   border: 1px solid #e5e7eb;
@@ -135,6 +133,18 @@ footer img {
   font: 14px system-ui, Arial, sans-serif;
   max-width: 280px;
 }
+
+/* Positions-Modifier */
+.legend.top-right {
+  top: 12px;
+  right: 12px;
+}
+
+.legend.bottom-right {
+  right: 12px;
+  bottom: 80px; /* über dem Footer */
+}
+
 .legend .legend-title {
   font-weight: 600;
   margin-bottom: 6px;
@@ -144,6 +154,9 @@ footer img {
   max-width: 100%;
   height: auto;
 }
+
+
+
 
 
 
@@ -181,8 +194,10 @@ footer img {
 </div>
 
   <script>
-    // ===== Orthofoto-Block =====
-    // Orthofoto-Basemap (WMTS REST)
+
+
+	
+// Orthofoto-Basemap (WMTS REST)	
     const wmtsSource = new ol.source.WMTS({
       urls: [
         'https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg'
@@ -197,9 +212,42 @@ footer img {
         resolutions: Array.from({length: 20}, (_, z) => 156543.03392804097 / Math.pow(2, z)),
         matrixIds: Array.from({length: 20}, (_, z) => String(z))
       }),
-      attributions: 'Basemap: <a href="https://www.basemap.at" target="_blank" rel="noopener">basemap.at</a>'
+		attributions: [
+			'Orthophoto: <a href="https://basemap.at/orthofoto/" target="_blank" rel="noopener">basemap.at</a> <br>',
+			'Orientierung: <a href="https://basemap.at/standard/" target="_blank" rel="noopener">basemap.at</a><br>',	
+			'Schummerung: <a href="https://www.landesentwicklung.steiermark.at/cms/ziel/141976122/DE/" target="_blank" rel="noopener">GIS-Steiermark</a>'
+		
+		]
     });
 
+// Geoland-Basemap (WMTS) später aktivierbar
+const geolandSource = new ol.source.WMTS({
+  urls: [
+    'https://maps.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png'
+  ],
+  layer: 'geolandbasemap',
+  matrixSet: 'google3857',
+  format: 'image/png',
+  style: 'normal',
+  requestEncoding: 'REST',
+  tileGrid: new ol.tilegrid.WMTS({
+    origin: ol.extent.getTopLeft(ol.proj.get('EPSG:3857').getExtent()),
+    resolutions: Array.from({length: 20}, (_, z) => 156543.03392804097 / Math.pow(2, z)),
+    matrixIds: Array.from({length: 20}, (_, z) => String(z))
+  }),
+  attributions: 'Basemap: <a href="https://www.basemap.at" target="_blank" rel="noopener">basemap.at</a>'
+});
+
+const lyrBasemap_Geoland  = new ol.layer.Tile({
+  source: geolandSource,
+  visible: false,   // Standard: AUS
+  zIndex: 0
+});
+
+
+
+
+//KARTE mit Orthofoto Basemap hinzugefügt
     const map = new ol.Map({
       target: 'map',
       layers: [ new ol.layer.Tile({ source: wmtsSource }) ],
@@ -212,8 +260,7 @@ footer img {
 
 
 
-
-    // =====  WMS-Overlays: SDM und Risikokarten ===== 
+// =====  WMS-Overlays: BAsemaps ===== 
     const WMS_URL = 'https://gis.stmk.gv.at/arcgis/services/OGD/ALSHoeheninformation_1m_UTM33N/MapServer/WMSServer';
 
     // Oberflächenschummerung
@@ -234,31 +281,38 @@ footer img {
       zIndex: 10
     });
 	
+// Geoland Basemap (OSM)
 
-    // Oberflaechenhoehe_Projekte
-    const lyrHoeheProj = new ol.layer.Tile({
-      source: new ol.source.TileWMS({
-        url: WMS_URL,
-        params: {
-          'LAYERS': 'Oberflaechenhoehe_Projekte',
-          'FORMAT': 'image/png',
-          'TRANSPARENT': true,
-          'VERSION': '1.3.0',
-          'TILED': true
-        },
-        crossOrigin: 'anonymous'
-      }),
-      visible: false,
-      opacity: 0.8,
-      zIndex: 11
-    });
-	
+const lyrGeoland = new ol.layer.Tile({
+  source: new ol.source.WMTS({
+    urls: [
+      'https://mapsneu.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png'
+    ],
+    layer: 'geolandbasemap',
+    matrixSet: 'google3857',
+    format: 'image/png',
+    style: 'normal',
+    requestEncoding: 'REST',
+    tileGrid: new ol.tilegrid.WMTS({
+      origin: ol.extent.getTopLeft(ol.proj.get('EPSG:3857').getExtent()),
+      resolutions: Array.from({length: 20}, (_, z) => 156543.03392804097 / Math.pow(2, z)),
+      matrixIds: Array.from({length: 20}, (_, z) => String(z))
+    }),
+    attributions: '© <a href="https://www.basemap.at" target="_blank" rel="noopener">basemap.at</a>'
+  }),
+  visible: false,
+  opacity: 1.0,
+  zIndex: 0
+});
+
+
+//VERTEILUNGSKARTEN SDMs
 	// Bombina Verteilung 
     const lyrBombina_const = new ol.layer.Tile({
       source: new ol.source.TileWMS({
         url: 'https://inspire.lfrz.gv.at/000607/wms',
         params: {
-          'LAYERS': '000607:Bombina_Modell_cont',//ändern
+          'LAYERS': '000607:Bombina_Modell_ABC',//ändern  Bombina_Modell_ABC, Bombina_Modell_cont
           'FORMAT': 'image/png',
           'TRANSPARENT': true,
           'VERSION': '1.3.0',
@@ -273,13 +327,13 @@ footer img {
     });
 
 
-// === NEU: Hirschkäfer (WMS) === ***LAYER_STEP1
+// === NEU: Hirschkäfer (WMS) === 
 const lyrHirschkaefer = new ol.layer.Tile({
   source: new ol.source.TileWMS({
     url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
-      'LAYERS': '000607:Lucanus_Modell_cont',      //ändern
-      'FORMAT': 'image/png',
+      'LAYERS': '000607:Lucanus_Modell_cont',      //ändern Lucanus_Modell_cont    Lucanus_Modell_ABC
+      'FORMAT': 'image/png', 
       'TRANSPARENT': true,
       'VERSION': '1.3.0',
       'TILED': true,
@@ -298,7 +352,7 @@ const lyrScharlachkaefer = new ol.layer.Tile({
   source: new ol.source.TileWMS({
     url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
-      'LAYERS': '000607:Cucujus_Modell_cont',      //ändern
+      'LAYERS': '000607:Lucanus_Modell_ABC',      //ändern Cucujus_Modell_cont   Cucujus_Modell_ABC
       'FORMAT': 'image/png',
       'TRANSPARENT': true,
       'VERSION': '1.3.0',
@@ -317,7 +371,7 @@ const lyrMittelspecht = new ol.layer.Tile({
   source: new ol.source.TileWMS({
     url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
-      'LAYERS': '000607:Leiopicus_Modell_cont',      //ändern
+      'LAYERS': '000607:Leiopicus_Modell_cont',      //ändern  Leiopicus_Modell_cont Leiopicus_Modell_ABC
       'FORMAT': 'image/png',
       'TRANSPARENT': true,
       'VERSION': '1.3.0',
@@ -337,7 +391,7 @@ const lyrGrauspecht = new ol.layer.Tile({
   source: new ol.source.TileWMS({
     url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
-      'LAYERS': '000607:Picus_Modell_cont',      //ändern
+      'LAYERS': '000607:Picus_Modell_ABC ',      //ändern Picus_Modell_ABC  Picus_Modell_cont
       'FORMAT': 'image/png',
       'TRANSPARENT': true,
       'VERSION': '1.3.0',
@@ -356,7 +410,7 @@ const lyrKammmolch = new ol.layer.Tile({
   source: new ol.source.TileWMS({
     url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {
-      'LAYERS': '000607:Triturus_Modell_cont',      //ändern
+      'LAYERS': '000607:Triturus_Modell_ABC',      //ändern Triturus_Modell_ABC     Triturus_Modell_cont
       'FORMAT': 'image/png',
       'TRANSPARENT': true,
       'VERSION': '1.3.0',
@@ -369,6 +423,227 @@ const lyrKammmolch = new ol.layer.Tile({
   opacity: 0.8,
   zIndex: 11
 });
+
+
+//Artenbeobachtungen ***LAYER_STEP1
+const lyrObservations = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:observations_all',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+
+
+
+
+//RISIKOKARTEN
+//risk_ABC ***LAYER_STEP1
+const lyrRisks_ABC = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:change_ABC',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//risk_parameter1 ***LAYER_STEP1
+const lyrRisk_parameter1 = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:risk_parameter1',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//risk_parameter2 ***LAYER_STEP1
+const lyrRisk_parameter2 = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:risk_parameter2',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//risk_parameter3 ***LAYER_STEP1
+const lyrRisk_parameter3 = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:risk_parameter3',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//risk_parameter4 ***LAYER_STEP1
+const lyrRisk_parameter4 = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:risk_parameter4',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//risk_parameter5 ***LAYER_STEP1
+const lyrRisk_parameter5 = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:risk_parameter5',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//risk_parameter6 ***LAYER_STEP1
+const lyrRisk_parameter6 = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:risk_parameter6',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//risk_parameter7 ***LAYER_STEP1
+const lyrRisk_parameter7 = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:risk_parameter7',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+//risk_parameter8 ***LAYER_STEP1
+const lyrRisk_parameter8 = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',           
+    params: {
+      'LAYERS': '000607:risk_parameter8',      //ändern 
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true,
+	  //'STYLES': 'Lcn_BY_style'
+	  },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+
+
+/*
+ // Oberflaechenhoehe_Projekte ***STEP1 PANEL R
+    const lyrHoeheProj = new ol.layer.Tile({
+      source: new ol.source.TileWMS({
+        url: WMS_URL,
+        params: {
+          'LAYERS': 'Oberflaechenhoehe_Projekte',
+          'FORMAT': 'image/png',
+          'TRANSPARENT': true,
+          'VERSION': '1.3.0',
+          'TILED': true
+        },
+        crossOrigin: 'anonymous'
+      }),
+      visible: false,
+      opacity: 0.8,
+      zIndex: 11
+    });
+
+*/
+
+
 
 
 // Debug: Fehlermeldungen im Browser-Console-Log
@@ -384,14 +659,30 @@ const lyrKammmolch = new ol.layer.Tile({
 
 
 	 // Overlays zur Karte hinzufügen ***LAYER_STEP2
-    map.addLayer(lyrSchummerung);
-    map.addLayer(lyrHoeheProj);
 	map.addLayer(lyrBombina_const);
 	map.addLayer(lyrHirschkaefer);
 	map.addLayer(lyrScharlachkaefer);
 	map.addLayer(lyrMittelspecht);	
 	map.addLayer(lyrGrauspecht);	
 	map.addLayer(lyrKammmolch);
+	//Observations
+	map.addLayer(lyrObservations);
+	//Risks
+	map.addLayer(lyrRisks_ABC);
+	map.addLayer(lyrRisk_parameter1);
+	map.addLayer(lyrRisk_parameter2);
+	map.addLayer(lyrRisk_parameter3);
+	map.addLayer(lyrRisk_parameter4);
+	map.addLayer(lyrRisk_parameter5);
+	map.addLayer(lyrRisk_parameter6);
+	map.addLayer(lyrRisk_parameter7);
+	map.addLayer(lyrRisk_parameter8);
+
+	// Karte hinzufügen (STEP2)
+	map.addLayer(lyrGeoland);
+	map.addLayer(lyrBasemap_Geoland);
+	map.addLayer(lyrSchummerung);
+    //map.addLayer(lyrHoeheProj);
 
 	
 	
@@ -400,21 +691,49 @@ const lyrKammmolch = new ol.layer.Tile({
 	
 	
 	
-// === LEGENDE: NEU Vebreitungskarten ===
+// === LEGENDE1: NEU Vebreitungskarten ===
 const legendUrl = 'https://inspire.lfrz.gv.at/000607/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Bombina_Modell_cont&style=Bmbn_BY_style';
 
 const legendDiv = document.createElement('div');
-legendDiv.className = 'legend';
+legendDiv.className = 'legend top-right';
 legendDiv.innerHTML = `
   <div class="legend-title">Vorkommens-<br>Wahrscheinlichkeit
-  <div>
+  </div>
   <img src="${legendUrl}" alt="Legende: Artvorkommen – Wahrscheinlichkeit">
 `;
-//legendDiv.style.display = 'none'; // anfangs ausgeblendet
+legendDiv.style.display = 'none'; // anfangs ausgeblendet
 document.getElementById('map').appendChild(legendDiv);	
-	
-	
-	
+
+
+
+// === LEGENDE2: NEU Changemaps ===
+const legendUrl2 = 'https://inspire.lfrz.gv.at/000607/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=change_ABC&style=change_ABC_style';
+
+const legendDiv2 = document.createElement('div'); // <- statt 'div2'
+legendDiv2.className = 'legend top-right';     // <- NEU: unten rechts
+legendDiv2.innerHTML = `
+  <div class="legend-title">Habitatzustands-Veränderung 2003-2019</div>
+  <img src="${legendUrl2}" alt="Legende: Habitat – Veränderung">
+`;
+legendDiv2.style.display = 'none'; // anfangs ausgeblendet
+document.getElementById('map').appendChild(legendDiv2);
+
+
+// === LEGENDE3: Risks ===
+const legendUrl3 = 'https://inspire.lfrz.gv.at/000607/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image/png&layer=000607:risk_parameter1';
+
+const legendDiv3 = document.createElement('div'); // <- statt 'div2'
+legendDiv3.className = 'legend top-right';     // <- NEU: unten rechts
+legendDiv3.innerHTML = `
+  <div class="legend-title"> Risikoeinschätzung </div>
+  <img src="${legendUrl3}" alt="Risikoeinschätzung (?)">
+`;
+legendDiv3.style.display = 'none'; // anfangs ausgeblendet
+document.getElementById('map').appendChild(legendDiv3);
+
+
+
+
 	
 // === PANELS: 2 separate zum Ausklappen hinzugefügt  ===
 
@@ -472,9 +791,11 @@ function createPanel({ title, defaultOpen = true }) {
 
 // Panel 1: Verbreitungskarten (oben) ---Reihenfolge bestimmen
 const { panel: panelV, body: bodyV } = createPanel({
-  title: 'Verbreitungskarten',
+  title: 'Verbreitungskarten Zeigerarten',
   defaultOpen: true
 });
+
+
 
 
 
@@ -486,7 +807,7 @@ rowHirsch.innerHTML = `
 `;
 bodyV.appendChild(rowHirsch);
 
-//Checkbox cucujus ***LAYER_STEP3
+//Checkbox cucujus 
 const rowScharlachkaefer = document.createElement('label');
 rowScharlachkaefer.className = 'panel-row';
 rowScharlachkaefer.innerHTML = `
@@ -494,7 +815,7 @@ rowScharlachkaefer.innerHTML = `
 `;
 bodyV.appendChild(rowScharlachkaefer);
 
-//Checkbox Leiopicus ***LAYER_STEP3
+//Checkbox Leiopicus 
 const rowMittelspecht = document.createElement('label');
 rowMittelspecht.className = 'panel-row';
 rowMittelspecht.innerHTML = `
@@ -502,7 +823,7 @@ rowMittelspecht.innerHTML = `
 `;
 bodyV.appendChild(rowMittelspecht);
 
-//Checkbox Picus ***LAYER_STEP3
+//Checkbox Picus 
 const rowGrauspecht = document.createElement('label');
 rowGrauspecht.className = 'panel-row';
 rowGrauspecht.innerHTML = `
@@ -511,7 +832,7 @@ rowGrauspecht.innerHTML = `
 bodyV.appendChild(rowGrauspecht);
 
 
-//Checkbox Triturus ***LAYER_STEP3
+//Checkbox Triturus 
 const rowKammmolch = document.createElement('label');
 rowKammmolch.className = 'panel-row';
 rowKammmolch.innerHTML = `
@@ -520,7 +841,7 @@ rowKammmolch.innerHTML = `
 bodyV.appendChild(rowKammmolch);
 
 
-// Checkbox für Bombina (weitere Layer später ergänzen)
+// Checkbox für Bombina (weitere Layer später ergänzen) ***LAYER_STEP3
 const rowBombina = document.createElement('label');
 rowBombina.className = 'panel-row';
 rowBombina.innerHTML = `
@@ -534,25 +855,123 @@ bodyV.appendChild(rowBombina);
 
 
 
-// Panel 2: Risikokarten (darunter)
+// Panel 2: Risikokarten (darunter) ***STEP3B
 const { panel: panelR, body: bodyR } = createPanel({
-  title: 'Risikokarten',
+  title: 'Risikokarten Auwaldhabitate',
   defaultOpen: true
 });
 
-const rowSchummer = document.createElement('label');
-rowSchummer.className = 'panel-row';
-rowSchummer.innerHTML = `
-  <input type="checkbox" id="chk_schummerung"> Oberflächenschummerung (Steiermark)
+//ABC change
+const rowChange_ABC = document.createElement('label');
+rowChange_ABC.className = 'panel-row';
+rowChange_ABC.innerHTML = `
+  <input type="checkbox" id="chk_Change_ABC"> Zustandsveränderung (2003-2019)
 `;
-bodyR.appendChild(rowSchummer);
+bodyR.appendChild(rowChange_ABC);
 
-const rowHoehe = document.createElement('label');
+//Parameter1
+const rowParameter1 = document.createElement('label');
+rowParameter1.className = 'panel-row';
+rowParameter1.innerHTML = `
+  <input type="checkbox" id="chk_Parameter1"> P1: Strukturarmut (wenige Gehölzschichten)
+`;
+bodyR.appendChild(rowParameter1);
+
+//Parameter2
+const rowParameter2 = document.createElement('label');
+rowParameter2.className = 'panel-row';
+rowParameter2.innerHTML = `
+  <input type="checkbox" id="chk_Parameter2"> P2: Mangel an Altbäumen (>35cm BHD)
+`;
+bodyR.appendChild(rowParameter2);
+
+//Parameter3
+const rowParameter3 = document.createElement('label');
+rowParameter3.className = 'panel-row';
+rowParameter3.innerHTML = `
+  <input type="checkbox" id="chk_Parameter3"> P3: Mangel an Totholz 
+`;
+bodyR.appendChild(rowParameter3);
+
+//Parameter4
+const rowParameter4 = document.createElement('label');
+rowParameter4.className = 'panel-row';
+rowParameter4.innerHTML = `
+  <input type="checkbox" id="chk_Parameter4"> P4: Baumartenmischung 
+`;
+bodyR.appendChild(rowParameter4);
+
+//Parameter5
+const rowParameter5 = document.createElement('label');
+rowParameter5.className = 'panel-row';
+rowParameter5.innerHTML = `
+  <input type="checkbox" id="chk_Parameter5"> P5: Standortfremde Gehölze
+`;
+bodyR.appendChild(rowParameter5);
+
+//Parameter6
+const rowParameter6 = document.createElement('label');
+rowParameter6.className = 'panel-row';
+rowParameter6.innerHTML = `
+  <input type="checkbox" id="chk_Parameter6"> P6: Neophyten in Krautschicht (Bodenvegetation)
+`;
+bodyR.appendChild(rowParameter6);
+
+//Parameter7
+const rowParameter7 = document.createElement('label');
+rowParameter7.className = 'panel-row';
+rowParameter7.innerHTML = `
+  <input type="checkbox" id="chk_Parameter7"> P7: Verbiss durch Wild
+`;
+bodyR.appendChild(rowParameter7);
+
+//Parameter8
+const rowParameter8 = document.createElement('label');
+rowParameter8.className = 'panel-row';
+rowParameter8.innerHTML = `
+  <input type="checkbox" id="chk_Parameter8"> P8: Kronenschäden
+`;
+bodyR.appendChild(rowParameter8);
+
+
+
+
+//TEST-Hoehe (DEAKTIVIERT)
+const rowHoehe = document.createElement('label'); 
 rowHoehe.className = 'panel-row';
 rowHoehe.innerHTML = `
   <input type="checkbox" id="chk_hoeheproj"> Oberflächenhöhe Projekte
 `;
-bodyR.appendChild(rowHoehe);
+//bodyR.appendChild(rowHoehe); // nicht sichtbar
+
+
+
+
+
+
+//Panel3: Basemaps
+const { panel: panelB, body: bodyB } = createPanel({
+  title: 'Hintergrundkarten',
+  defaultOpen: true
+});
+
+//Schummerung
+const rowSchummer = document.createElement('label'); ///***LAYER_STEP3C
+rowSchummer.className = 'panel-row'; 
+rowSchummer.innerHTML = `
+  <input type="checkbox" id="chk_base_schummerung"> Schummerung für Waldstruktur
+`;
+bodyB.appendChild(rowSchummer);
+
+// Checkbox: Geoland Basemap
+const rowBaseGeoland = document.createElement('label');
+rowBaseGeoland.className = 'panel-row';
+rowBaseGeoland.innerHTML = `
+  <input type="checkbox" id="chk_base_geoland"> Orientierung mit Ortsnamen
+`;
+bodyB.appendChild(rowBaseGeoland);
+
+
 
 
 
@@ -560,11 +979,13 @@ bodyR.appendChild(rowHoehe);
 // Beide Panels in den Stack einfügen
 stack.appendChild(panelV); //Verbreitung
 stack.appendChild(panelR); //Risiko
+stack.appendChild(panelB); //BAsemaps
 
 
 
 
-// Checkbox-Referenzen & Logik ***STEP4
+// Checkbox-Referenzen & Logik ***STEP4A
+//Panel V
 const chkBombina = bodyV.querySelector('#chk_bombina');
 const chkHirsch = bodyV.querySelector('#chk_hirsch');
 const chkScharlachkaefer = bodyV.querySelector('#chk_Scharlachkaefer');
@@ -572,73 +993,196 @@ const chkMittelspecht= bodyV.querySelector('#chk_Mittelspecht');
 const chkGrauspecht = bodyV.querySelector('#chk_Grauspecht');
 const chkKammmolch = bodyV.querySelector('#chk_Kammmolch');
 
+
+//Panel R ***STEP4B
+const chkChangeABC = bodyR.querySelector('#chk_Change_ABC');
 const chkSchummerung = bodyR.querySelector('#chk_schummerung');
-const chkHoeheProj = bodyR.querySelector('#chk_hoeheproj');
+//const chkHoeheProj = bodyR.querySelector('#chk_hoeheproj');
+const chkParameter1 = bodyR.querySelector('#chk_Parameter1');
+const chkParameter2 = bodyR.querySelector('#chk_Parameter2');
+const chkParameter3 = bodyR.querySelector('#chk_Parameter3');
+const chkParameter4 = bodyR.querySelector('#chk_Parameter4');
+const chkParameter5 = bodyR.querySelector('#chk_Parameter5');
+const chkParameter6 = bodyR.querySelector('#chk_Parameter6');
+const chkParameter7 = bodyR.querySelector('#chk_Parameter7');
+const chkParameter8 = bodyR.querySelector('#chk_Parameter8');
+
+
+// Panel B ***STEP4C
+const chkBaseSchummerung = bodyB.querySelector('#chk_base_schummerung');
+const chkBaseGeoland = bodyB.querySelector('#chk_base_geoland');
+
+
+
+
+//Legenden-Logik: Liste für gemeinsame Legende alle V-Layer
+const speciesgroup  = [
+  { chk: chkBombina,        layer: lyrBombina_const },
+  { chk: chkHirsch,         layer: lyrHirschkaefer },
+  { chk: chkScharlachkaefer,layer: lyrScharlachkaefer },
+  { chk: chkMittelspecht,   layer: lyrMittelspecht },
+  { chk: chkGrauspecht,     layer: lyrGrauspecht },
+  { chk: chkKammmolch,      layer: lyrKammmolch }
+];
+
+//Legenden-Logik: Liste für gemeinsame Legende R-Layer
+const riskgroup  = [
+ { chk: chkParameter1,      layer: lyrRisk_parameter1 },
+  { chk: chkParameter2,		layer: lyrRisk_parameter2 },
+  { chk: chkParameter3,   	layer: lyrRisk_parameter3 },
+  { chk: chkParameter4,     layer: lyrRisk_parameter4 },
+  { chk: chkParameter5,     layer: lyrRisk_parameter5 },
+  { chk: chkParameter6,		layer: lyrRisk_parameter6 },
+  { chk: chkParameter7,   	layer: lyrRisk_parameter7 },
+  { chk: chkParameter8,     layer: lyrRisk_parameter8 }
+];
+
+
+// Für Exklusivität in Panel R (Parameter ODER Change_ABC)
+const allExclusive = [
+  ...speciesgroup,
+  ...riskgroup,
+  { chk: chkChangeABC, layer: lyrRisks_ABC } // eigene Legende: ABC_Change --> legendDiv3
+];
+
+
+
+
+// --- Helferfunktion: exakt einen Layer in einer Gruppe aktivieren ---
+function setExclusive(group, activeChk) {
+  group.forEach(({chk, layer}) => {
+    const on = (chk === activeChk);
+    chk.checked = on;
+    layer.setVisible(on);
+  });
+}
+
+
+///Zentrale Legendenschaltfunktion
+function updateLegends() {
+  // Wer ist aktiv?
+  const active = allExclusive.find(({chk}) => chk.checked);
+
+  // Standard: alles aus
+  legendDiv.style.display  = 'none'; // Arten (Panel V)
+  legendDiv2.style.display = 'none'; // Change_ABC
+  legendDiv3.style.display = 'none'; // Parameter 1–8
+
+  if (!active) return;
+
+  // In welcher Gruppe liegt der aktive?
+  const isSpecies = speciesgroup.some(({chk}) => chk === active.chk);
+  const isChange  = (active.chk === chkChangeABC);
+  const isParam   = riskgroup.some(({chk}) => chk === active.chk);
+
+  if (isSpecies) {
+    legendDiv.style.display = 'block';
+  } else if (isChange) {
+    legendDiv2.style.display = 'block';
+  } else if (isParam) {
+    legendDiv3.style.display = 'block';
+  }
+}
+
+
+
+/*
+function setExclusive_V(active) {
+  layergroup.forEach(({chk, layer}) => {
+    const isActive = (chk === active);
+    chk.checked = isActive;
+    layer.setVisible(isActive);
+	
+  });
+}
+*/
+
+
+// --- Legendenschalter: zeigt genau eine der drei Legenden (oder keine) ---
+function setLegendState(mode) {
+  // mode: 'species' | 'change' | 'risk' | 'none'
+  legendDiv.style.display  = (mode === 'species') ? 'block' : 'none'; // Panel V
+  legendDiv2.style.display = (mode === 'change')  ? 'block' : 'none'; // Change_ABC
+  legendDiv3.style.display = (mode === 'risk')    ? 'block' : 'none'; // Parameter 1-8
+}
+
+// Hilfsfunktionen, die echten Zustand prüfen:
+function anySpeciesOn() { return speciesgroup.some(({chk}) => chk.checked); }
+function anyRiskParamOn() { return riskgroup.some(({chk}) => chk.checked); }
+function isChangeOn() { return chkChangeABC.checked; }
+
+// Nach jedem Klick rufen wir diese Funktion auf:
+function updateLegendsFromState() {
+  if (anySpeciesOn())          return setLegendState('species');
+  if (isChangeOn())            return setLegendState('change');
+  if (anyRiskParamOn())        return setLegendState('risk');
+  return setLegendState('none');
+}
 
 
 
 
 
 
-//Set Visibility ***STEP5
-chkBombina.addEventListener('change', () => {
-  lyrBombina_const.setVisible(chkBombina.checked);
-    //legendDiv.style.display = chkBombina.checked ? 'block' : 'none'; 
-	// === LEGENDE Verbreitungskarten ===
+//LEGENDEN und EXKLUSIVE AUSWAHL
+////EVENT LISTENERS  PanelV and PanelR exclusive    ***STEP5
+// Panel V (Arten)
+speciesgroup.forEach(({chk}) => {
+  chk.addEventListener('change', () => {
+    if (chk.checked) setExclusive(allExclusive, chk);
+    else { /* falls man "entcheckt": nichts aktiv => Legends aus */ 
+      // Optional: wenn du "alle aus" erlauben willst:
+      chk.checked = false;
+      const { layer } = speciesGroup.find(x => x.chk === chk);
+      layer.setVisible(false);
+    }
+    updateLegends();
+  });
 });
 
-chkHirsch.addEventListener('change', () => {
-  lyrHirschkaefer.setVisible(chkHirsch.checked);
-
+// Panel R: Change_ABC
+chkChangeABC.addEventListener('change', () => {
+  if (chkChangeABC.checked) setExclusive(allExclusive, chkChangeABC);
+  else lyrRisks_ABC.setVisible(false);
+  updateLegends();
 });
 
-chkScharlachkaefer.addEventListener('change', () => {
-  lyrScharlachkaefer.setVisible(chkScharlachkaefer.checked);
-
+// Panel R: Parameter 1–8
+riskgroup.forEach(({chk}) => {
+  chk.addEventListener('change', () => {
+    if (chk.checked) setExclusive(allExclusive, chk);
+    else {
+      const { layer } = riskParams.find(x => x.chk === chk);
+      layer.setVisible(false);
+    }
+    updateLegends();
+  });
 });
 
-chkMittelspecht.addEventListener('change', () => {
-  lyrMittelspecht.setVisible(chkMittelspecht.checked);
+//LEGENDE: Voreinstellung
+// z.B. Hirschkäfer aktiv
+setExclusive(speciesgroup, chkHirsch);
+updateLegendsFromState();
 
+
+
+
+
+//Set Visibility Panel B - Basemaps	***STEP5C
+chkBaseSchummerung.addEventListener('change', () => {
+  lyrSchummerung.setVisible(chkBaseSchummerung.checked);
 });
 
-chkGrauspecht.addEventListener('change', () => {
-  lyrGrauspecht.setVisible(chkGrauspecht.checked);
-
-});
-
-chkKammmolch.addEventListener('change', () => {
-  lyrKammmolch.setVisible(chkKammmolch.checked);
-
+chkBaseGeoland.addEventListener('change', () => {
+  lyrGeoland.setVisible(chkBaseGeoland.checked);
 });
 
 
 
-chkSchummerung.addEventListener('change', () => {
-  lyrSchummerung.setVisible(chkSchummerung.checked);
-});
-chkHoeheProj.addEventListener('change', () => {
-  lyrHoeheProj.setVisible(chkHoeheProj.checked);
-});
-
-// Optional: Defaults setzen (z. B. beim Laden aktivieren)
-//chkBombina.checked = true;
-chkHirsch.checked = true;
-lyrHirschkaefer.setVisible(true);
-legendDiv.style.display = 'block';
-/// lyrSchummerung.setVisible(true);  chkSchummerung.checked = true;
-/// lyrHoeheProj.setVisible(true);    chkHoeheProj.checked = true;
 	
 	
-	
-	
-	
-	
-	
-	
-	
-    // Maßstabsleiste hinzufügen
-    map.addControl(new ol.control.ScaleLine());
+   // Maßstabsleiste hinzufügen
+   map.addControl(new ol.control.ScaleLine());
 
   </script>
 </body>
