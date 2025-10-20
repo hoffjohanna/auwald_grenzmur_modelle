@@ -1152,7 +1152,7 @@ riskgroup.forEach(({chk}) => {
   chk.addEventListener('change', () => {
     if (chk.checked) setExclusive(allExclusive, chk);
     else {
-      const { layer } = riskParams.find(x => x.chk === chk);
+      const { layer } = riskgroup.find(x => x.chk === chk);
       layer.setVisible(false);
     }
     updateLegends();
@@ -1187,3 +1187,4 @@ chkBaseGeoland.addEventListener('change', () => {
   </script>
 </body>
 </html>
+
