@@ -332,7 +332,7 @@ const lyrHirschkaefer = new ol.layer.Tile({
   source: new ol.source.TileWMS({
     url: 'https://inspire.lfrz.gv.at/000607/wms',           
     params: {//beide Modelle übereinander
-      'LAYERS': ['000607:Lucanus_Modell_ABC'],      //ändern Lucanus_Modell_cont  Lucanus_Modell_ABC ['000607:Lucanus_Modell_cont', '000607:Lucanus_Modell_ABC'],
+      'LAYERS': ['000607:Lucanus_Modell_cont', '000607:Lucanus_Modell_ABC'],      //ändern Lucanus_Modell_cont    Lucanus_Modell_ABC
       'FORMAT': 'image/png', 
       'TRANSPARENT': true,
       'VERSION': '1.3.0',
@@ -443,8 +443,6 @@ const lyrObservations = new ol.layer.Tile({
   opacity: 0.8,
   zIndex: 11
 });
-
-
 
 
 
@@ -621,6 +619,42 @@ const lyrRisk_parameter8 = new ol.layer.Tile({
 });
 
 
+// Fragmentierung ***LAYER_STEP1
+const lyrFragmentierung = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',
+    params: {
+      'LAYERS': '000607:fragmentation_edgeDensity_3857', // ggf. '000607:fragmentation_edgeDensity_3857'
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true
+    },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 0.8,
+  zIndex: 11
+});
+
+// Interventionen ***LAYER_BASE_PANEL3
+const lyrInterventionen = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://inspire.lfrz.gv.at/000607/wms',
+    params: {
+      'LAYERS': '000607:interventionen_alle_oekoteam_3857',
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'TILED': true
+    },
+    crossOrigin: 'anonymous'
+  }),
+  visible: false,
+  opacity: 1.0,
+  zIndex: 20   // etwas über den Basemaps
+});
+
 
 /*
  // Oberflaechenhoehe_Projekte ***STEP1 PANEL R
@@ -677,6 +711,8 @@ const lyrRisk_parameter8 = new ol.layer.Tile({
 	map.addLayer(lyrRisk_parameter6);
 	map.addLayer(lyrRisk_parameter7);
 	map.addLayer(lyrRisk_parameter8);
+	map.addLayer(lyrFragmentierung);
+	map.addLayer(lyrInterventionen);
 
 	// Karte hinzufügen (STEP2)
 	map.addLayer(lyrGeoland);
@@ -730,6 +766,31 @@ legendDiv3.innerHTML = `
 `;
 legendDiv3.style.display = 'none'; // anfangs ausgeblendet
 document.getElementById('map').appendChild(legendDiv3);
+
+// === LEGENDE4: Fragmentierung === *******STEP2.1
+const legendUrl4 = 'https://inspire.lfrz.gv.at/000607/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image/png&layer=fragmentation_edgeDensity_3857';
+
+const legendDiv4 = document.createElement('div'); // <- statt 'div2'
+legendDiv4.className = 'legend top-right';     // <- NEU: unten rechts
+legendDiv4.innerHTML = `
+  <div class="legend-title"> Fragmentierung (Edge Density) </div>
+  <img src="${legendUrl4}" alt="Fragmentierung (Edge Density) (?)">
+`;
+legendDiv4.style.display = 'none'; // anfangs ausgeblendet
+document.getElementById('map').appendChild(legendDiv4);
+
+
+// === LEGENDE5: Interventionen ===
+const legendUrl5 = 'https://inspire.lfrz.gv.at/000607/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=interventionen_alle_oekoteam_3857';
+
+const legendDiv5 = document.createElement('div');
+legendDiv5.className = 'legend bottom-right';  // unten rechts, damit sie nicht mit den anderen kollidiert
+legendDiv5.innerHTML = `
+  <div class="legend-title"> Interventions-Art </div>
+  <img src="${legendUrl5}" alt="Legende: Interventionen">
+`;
+legendDiv5.style.display = 'none';
+document.getElementById('map').appendChild(legendDiv5);
 
 
 
@@ -933,7 +994,13 @@ rowParameter8.innerHTML = `
 `;
 bodyR.appendChild(rowParameter8);
 
-
+// Fragmentierung
+const rowFragmentierung = document.createElement('label');
+rowFragmentierung.className = 'panel-row';
+rowFragmentierung.innerHTML = `
+  <input type="checkbox" id="chk_Fragmentierung"> Fragmentierung
+`;
+bodyR.appendChild(rowFragmentierung);
 
 
 //TEST-Hoehe (DEAKTIVIERT)
@@ -949,12 +1016,21 @@ rowHoehe.innerHTML = `
 
 
 
-//Panel3: Basemaps
+//Panel3: Basemaps  ****STEP3C
 const { panel: panelB, body: bodyB } = createPanel({
-  title: 'Hintergrundkarten',
+  title: 'Hintergrundkarten und Aktionsflächen',
   defaultOpen: true
 });
 
+
+/// Reihenfolge der Layer
+// Checkbox: Interventionen
+const rowInterventionen = document.createElement('label');
+rowInterventionen.className = 'panel-row';
+rowInterventionen.innerHTML = `
+  <input type="checkbox" id="chk_interventionen"> Projekt-Interventionen
+`;
+bodyB.appendChild(rowInterventionen);
 //Schummerung
 const rowSchummer = document.createElement('label'); ///***LAYER_STEP3C
 rowSchummer.className = 'panel-row'; 
@@ -976,7 +1052,7 @@ bodyB.appendChild(rowBaseGeoland);
 
 
 
-// Beide Panels in den Stack einfügen
+// Alle Panels in den Stack einfügen
 stack.appendChild(panelV); //Verbreitung
 stack.appendChild(panelR); //Risiko
 stack.appendChild(panelB); //BAsemaps
@@ -1006,11 +1082,13 @@ const chkParameter5 = bodyR.querySelector('#chk_Parameter5');
 const chkParameter6 = bodyR.querySelector('#chk_Parameter6');
 const chkParameter7 = bodyR.querySelector('#chk_Parameter7');
 const chkParameter8 = bodyR.querySelector('#chk_Parameter8');
+const chkFragmentierung = bodyR.querySelector('#chk_Fragmentierung');
 
 
 // Panel B ***STEP4C
 const chkBaseSchummerung = bodyB.querySelector('#chk_base_schummerung');
 const chkBaseGeoland = bodyB.querySelector('#chk_base_geoland');
+const chkInterventionen = bodyB.querySelector('#chk_interventionen');
 
 
 
@@ -1034,7 +1112,8 @@ const riskgroup  = [
   { chk: chkParameter5,     layer: lyrRisk_parameter5 },
   { chk: chkParameter6,		layer: lyrRisk_parameter6 },
   { chk: chkParameter7,   	layer: lyrRisk_parameter7 },
-  { chk: chkParameter8,     layer: lyrRisk_parameter8 }
+  { chk: chkParameter8,     layer: lyrRisk_parameter8 },
+  { chk: chkFragmentierung,  layer: lyrFragmentierung }
 ];
 
 
@@ -1058,7 +1137,7 @@ function setExclusive(group, activeChk) {
 }
 
 
-///Zentrale Legendenschaltfunktion
+///Zentrale Legendenschaltfunktion ***STEP7
 function updateLegends() {
   // Wer ist aktiv?
   const active = allExclusive.find(({chk}) => chk.checked);
@@ -1067,19 +1146,25 @@ function updateLegends() {
   legendDiv.style.display  = 'none'; // Arten (Panel V)
   legendDiv2.style.display = 'none'; // Change_ABC
   legendDiv3.style.display = 'none'; // Parameter 1–8
+  legendDiv4.style.display = 'none'; // Fragmentierung
+
 
   if (!active) return;
 
   // In welcher Gruppe liegt der aktive?
   const isSpecies = speciesgroup.some(({chk}) => chk === active.chk);
   const isChange  = (active.chk === chkChangeABC);
-  const isParam   = riskgroup.some(({chk}) => chk === active.chk);
+  const isRiskParam    = riskgroup.some(({ chk }) => chk === active.chk && chk !== chkFragmentierung);
+  const isFragment     = (active.chk === chkFragmentierung);
+
 
   if (isSpecies) {
     legendDiv.style.display = 'block';
   } else if (isChange) {
     legendDiv2.style.display = 'block';
-  } else if (isParam) {
+  } else if (isFragment) {
+    legendDiv4.style.display = 'block';
+  } else if (isRiskParam) {
     legendDiv3.style.display = 'block';
   }
 }
@@ -1104,6 +1189,8 @@ function setLegendState(mode) {
   legendDiv.style.display  = (mode === 'species') ? 'block' : 'none'; // Panel V
   legendDiv2.style.display = (mode === 'change')  ? 'block' : 'none'; // Change_ABC
   legendDiv3.style.display = (mode === 'risk')    ? 'block' : 'none'; // Parameter 1-8
+   legendDiv4.style.display = (mode === 'risk')    ? 'block' : 'none'; // Fragmentierung
+
 }
 
 // Hilfsfunktionen, die echten Zustand prüfen:
@@ -1126,7 +1213,7 @@ function updateLegendsFromState() {
 
 //LEGENDEN und EXKLUSIVE AUSWAHL
 ////EVENT LISTENERS  PanelV and PanelR exclusive    ***STEP5
-// Panel V (Arten)
+// Panel V (Verteilung Zeigerartenarten)
 speciesgroup.forEach(({chk}) => {
   chk.addEventListener('change', () => {
     if (chk.checked) setExclusive(allExclusive, chk);
@@ -1159,6 +1246,20 @@ riskgroup.forEach(({chk}) => {
   });
 });
 
+// Panel R: Parameter 1–8 + Fragmentierung
+riskgroup.forEach(({ chk, layer }) => {
+  chk.addEventListener('change', () => {
+    if (chk.checked) {
+      // macht diesen Layer exklusiv aktiv
+      setExclusive(allExclusive, chk);
+    } else {
+      // Checkbox abgewählt → Layer aus
+      layer.setVisible(false);
+    }
+    updateLegends();
+  });
+});
+
 //LEGENDE: Voreinstellung
 // z.B. Hirschkäfer aktiv
 setExclusive(speciesgroup, chkHirsch);
@@ -1177,7 +1278,11 @@ chkBaseGeoland.addEventListener('change', () => {
   lyrGeoland.setVisible(chkBaseGeoland.checked);
 });
 
-
+chkInterventionen.addEventListener('change', () => {
+  const on = chkInterventionen.checked;
+  lyrInterventionen.setVisible(on);
+  legendDiv5.style.display = on ? 'block' : 'none';
+});
 
 	
 	
@@ -1187,7 +1292,3 @@ chkBaseGeoland.addEventListener('change', () => {
   </script>
 </body>
 </html>
-
-
-
-
