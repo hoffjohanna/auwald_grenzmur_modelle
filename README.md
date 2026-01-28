@@ -1,6 +1,6 @@
 # Projekt Auwaldinitiative
-Eine Projektbeschreibung "Auen-Renaturierung im Europaschutzgebiet Steirische Grenzmur - Auwaldinitiative" ist hier zu finden:
-https://www.bfw.gv.at/waldwissen-forschung/bfw-projektdatenbank/ 
+Eine Projektbeschreibung <strong>"Auen-Renaturierung im Europaschutzgebiet Steirische Grenzmur - Auwaldinitiative"</strong> ist [hier](https://www.bfw.gv.at/waldwissen-forschung/bfw-projektdatenbank/) zu finden:
+
 Die Webkarten sind im html Format gehalten und sind Teil des Arbeitspakets 5 (AP5) des Projektes, welches ein "okologisches Frühwarnsystem" für den Auwald an der Grenzmur entwickeln soll.
 
 ## Zielarten im Auwald:
@@ -12,15 +12,16 @@ Alpenkammmolch - Triturus carnifex
 Gelbbauch-unke - Bombina variegata  
 
 ## ökologisches Frühwarnsystem: AP5
-Die Entwicklung eines Frühwarnsystems zur frühzeitigen Erkennung potenzieller Gefährdungen für die Biodiversität des Auwalds wurde eingeleitet. Ein Startpunkt lag auf der Recherche und systematischen Analyse der Habitatansprüche ausgewählter Zeigerarten. Diese Analyse bildet die Grundlage für eine vorausschauende Planung von Schutzmaßnahmen sowie für das Monitoring der biologischen Vielfalt in der Projektregion. Für jede dieser Arten wurden die ökologischen Anforderungskategorien wie Lebensraum, Nahrungsangebot, Waldstruktur und artspezifische Merkmale analysiert. Besondere Beachtung fanden auch Wanderhindernisse, die für Amphibien wie den Kammmolch und die Gelbbauchunke von hoher Relevanz sein können.
+Die Entwicklung eines Frühwarnsystems zur frühzeitigen Erkennung potenzieller Gefährdungen für die Biodiversität des Auwalds wurde eingeleitet. Ein Startpunkt lag auf der Recherche und systematischen Analyse der Habitatansprüche ausgewählter Zeigerarten durch das Bundesforschungszentrum für Wald - [BFW](https://www.bfw.gv.at/). Diese Analyse bildet die Grundlage für eine vorausschauende Planung von Schutzmaßnahmen sowie für das Monitoring der biologischen Vielfalt in der Projektregion das Natura2000 Schutzgebiet "Auwald an der Grenzmur" in der Süd-Steiermark. Für jede dieser Arten wurden die ökologischen Anforderungskategorien wie Lebensraum, Nahrungsangebot, Waldstruktur und artspezifische Merkmale analysiert. 
 
---> Erstellung von Risikokarten und Verbreitungskarten anhand von Habitat-Modellierungen basierend auf Feld-Kartierungen (AP5, Projekt Auwaldinitiative)
-Die Erstellung der Risikokarten und Arten-Verbreitungskarten im Projektgebiet erfolgte mit den Datengrundlagen der Feldaufnahmen vom Ökoteam (AP5 Datenerhebung) in den Jahren 2024, 2025. Dort fand ein Monitoring der 6 Zielarten, als auch der Umweltparameter statt. Diese dienten als Input-Grundlage für die Modellierungen (Abbildung 1). Die Outputs bzw. Ergebnisse der Modellierungen werden in Form von Karten (Risikokarten und Verbreitungskarten) im Frühwarnsystem später genutzt.
+Die Erstellung der Risikokarten und Arten-Verbreitungskarten im Projektgebiet erfolgte mit den Datengrundlagen der Feldaufnahmen vom [Ökoteam](https://www.oekoteam.at/de/) (AP5 Datenerhebung) in den Jahren 2024, 2025. Dort fand ein Monitoring der 6 Zielarten, als auch der Umweltparameter statt. Diese dienten als Input-Grundlage für die Modellierungen. Die Outputs bzw. Ergebnisse der Modellierungen werden in Form von Karten (Risikokarten und Verbreitungskarten) im Frühwarnsystem genutzt.
 
 Modellierungen wurde durchgeführt, um folgende Fragen zu beantworten:
-•	Wo sind potentielle Habitate für die Zeigerarten? (Verbreitungskarten)
-•	Wie wird deren Vorkommen von Umweltfaktoren beeinflusst? (Modellergebnisse)
-•	Wo sind diese Risiken erhöht und Eingriffe notwendig? (Risikokarten)
+<ul>
+  <li> Wo sind potentielle Habitate für die Zeigerarten? (Verbreitungskarten)</li>
+    <li> Wie wird im Model deren Vorkommen von Umweltfaktoren beeinflusst? (Modellergebnisse)</li>
+    <li> Wo sind diese Risiken erhöht und Eingriffe notwendig? (Risikokarten)</li>
+</ul>
 Es wurden verschiedene Random-Forest Modellierungen durchgeführt basierend auf entweder den im Feld aufgenommenen kategoriellen Umweltparametern (im Folgenden “ABC-Modell” benannt) und mit zusätzlich gesammelten kontinuierliche GIS-Daten (im Folgenden “erweitertes Modell” genannt). Kategorielle Daten (siehe Tabelle 2) bestanden aus insgesamt neun Parametern zu Habitatstruktur (A-stukturreich, B- mäßig sturkturreich, C-strukturarm), Artenzusammensetzung (A - typisch, B - bedingt typisch und C- untypisch) und Störungen (keine/gering, B – mittel, C – stark). Zusätzlich dazu wurde zum ABC-Model noch der Parameter “Habitat-change” hinzugefügt. Dieser stellt die Veränderung der Habitatqualität seit der letzten Lebensraumkartierungen 2001 im Vergleich zu den aktuellen Kartierungen  dar. Für das erweiterte Modell wurden kontinuierliche räumliche Daten gesammelt, um die Parameter 1-9 zu ergänzen und mit beispielsweise Fragmentierungsparametern, Karten von durch Satellitendaten detektierte Kronenschäden und räumliche Landschaftsparameter wie Distanz zu Flüssen und Seen und Baumartenvielfalt zu werweitern.
 
 ### Frühwarnsystem: technische Umsetzung und Integration des Frühwarnsystems in bestehende Überwachungsstrukturen. 
@@ -50,13 +51,16 @@ Die Erstellung der Risikokarten und Arten-Verbreitungskarten im Projektgebiet er
 
 # Verwendung der Verbeitungskarten
 Zur Interpretation der Modelle erstellten wir Partielle Abhängigkeitsdiagramme (pdp - Partial-Dependence-Plots), die zeigen, wie einzelne Umweltvariablen die vorhergesagte Wahrscheinlichkeit beeinflussen (Abbidung 3). Die Variablenbedeutung (varimp – variable importance) bestimmten wir über den Anstieg des Modellfehlers (RMSE), wenn einzelne Variablen zufällig durchmischt werden (Abbldung 4). Anhand dieser Plots können Sets aus Einflussfaktoren für jede Zielart herausgearbeitet werden (Abbildung 5). Folgende Aussagen kann man aus diesen Sets angelehnt an die Modellergebnisse herausarbeiten:
-•	Das Verbreitungsmodell für den Scharlachkäfer ist besonders sensibel gegenüber (ggü) Totholzmangel und Habitatveränderungen
-•	Das Verbreitungsmodell für den Hirschkäfer ist sensibel ggü Totholzmangel und Habitatveränderungen, aber ebenso ggü. Wildeinfluss  und fast alle anderen Faktoren (ausgenommen Fragmentierung)
-•	Das Verbreitungsmodell für den Kammmolch ist stark beeinflusst von hydrologsichem Regime, sensibel ggü. Habitatqualitätsänderungen, aber auch Neophyten und Mangel an Totholz haben Einfluss 
-•	Die Verbreitungsmodelle für den Grauspecht und Mittelspecht sind Totholz-abhängig, wobei Grauspecht-Modell eine Sensitivität ggü Habitatveränderungen und Wildverbiss aufweist, das Modell des Mittelspechts etwas weniger
-•	Das Verbreitungsmodell für die Gelbbauchunke wird vor allem negativ beeinflusst von Habitatfragmentierung und -veränderungen, sowie Anomalien des hydrologischen Regimes
+<ul>
+  <li> Das Verbreitungsmodell für den Scharlachkäfer ist besonders sensibel gegenüber (ggü) Totholzmangel und Habitatveränderungen </li>
+  <li> Das Verbreitungsmodell für den Hirschkäfer ist sensibel ggü Totholzmangel und Habitatveränderungen, aber ebenso ggü. Wildeinfluss  und fast alle anderen Faktoren (ausgenommen Fragmentierung)</li>
+  <li> Das Verbreitungsmodell für den Kammmolch ist stark beeinflusst von hydrologsichem Regime, sensibel ggü. Habitatqualitätsänderungen, aber auch Neophyten und Mangel an Totholz haben Einfluss </li>
+  <li> Die Verbreitungsmodelle für den Grauspecht und Mittelspecht sind Totholz-abhängig, wobei Grauspecht-Modell eine Sensitivität ggü Habitatveränderungen und Wildverbiss aufweist, das Modell des Mittelspechts etwas weniger </li>
+  <li> Das Verbreitungsmodell für die Gelbbauchunke wird vor allem negativ beeinflusst von Habitatfragmentierung und -veränderungen, sowie Anomalien des hydrologischen Regimes </li>
+
+</ul>
 Diese Ergebnisse sind jedoch mit Vorsicht zu genießen und stellen lediglich Korrelationen, keine Kausalzusammenhänge dar. Auch können Sekundäreffekte nicht ausgeschlossen werden. 
-Modellstatistiken der zwei Modelle geben Aufschluss über die Modellgüte (Abbildung 6 und 7). Dabei zeigt sich das ABC in allen Bereichen eindeutig am robustesten und aussagekräftigsten. Deshalb werden für das Frühwarnsystem vor allem Umweltdaten und die Verbreitungskarten des ABC-Modells dargestellt. Außerdem wurden die Umweltparameter als Risikoparameter hinzugefügt, die am meisten einen negativen Einfluss auf die Verbreitungsmodelle hatten (Abbildung 8).
+Modellstatistiken der zwei Modelle geben Aufschluss über die Modellgüte. Dabei zeigt sich das ABC in allen Bereichen eindeutig am robustesten und aussagekräftigsten. Deshalb werden für das Frühwarnsystem vor allem Umweltdaten und die Verbreitungskarten des ABC-Modells dargestellt. Außerdem wurden die Umweltparameter als Risikoparameter hinzugefügt, die am meisten einen negativen Einfluss auf die Verbreitungsmodelle hatten (Abbildung 8).
 
 
 
