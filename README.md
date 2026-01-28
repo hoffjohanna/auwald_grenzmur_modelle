@@ -83,4 +83,4 @@ Während der Projektlaufzeit wurden die Karten in lokalen Veranstaltungen und Wo
 https://www.nukv.at/riskmaps/
 
 # Datenschutzrichtlinien
-Die Verwendung der Karten läuft über den INSPIRE Kartendienst des Land-, forst- und wasserwirtschaftlichen Rechenzentrums (LFRZ). Die Daten sind öffentlich zugänglich. Gemäß § 4 BDSG muss jeder Seitenbesucher über die Erhebung seiner personenbezogenen Daten informiert werden. Hierfür ist eine Datenschutzerklärung notwendig. Diese wird bei der Nutzung der Website https://www.nukv.at/riskmaps/ integriert.
+Die Verwendung der Karten läuft über den INSPIRE Kartendienst des Land-, forst- und wasserwirtschaftlichen Rechenzentrums (LFRZ). Die Daten sind öffentlich zugänglich. Gemäß § 4 BDSG muss jeder Seitenbesucher über die Erhebung seiner personenbezogenen Daten informiert werden. Hierfür ist eine Datenschutzerklärung notwendig. Diese wird bei der Nutzung der Website integriert.
