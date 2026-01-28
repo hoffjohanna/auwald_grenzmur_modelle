@@ -64,8 +64,8 @@ P9: gestörte Hydrologie
 Fragmentierung (Edge density - Verhältnis von Umfang zu Fläche eines Waldstückes)  
 
 
-# Verwendung der Verbeitungskarten
-Zur Interpretation der Modelle erstellten wir Partielle Abhängigkeitsdiagramme (pdp - Partial-Dependence-Plots), die zeigen, wie einzelne Umweltvariablen die vorhergesagte Wahrscheinlichkeit beeinflussen (Abbidung 3). Die Variablenbedeutung (varimp – variable importance) bestimmten wir über den Anstieg des Modellfehlers (RMSE), wenn einzelne Variablen zufällig durchmischt werden (Abbldung 4). Anhand dieser Plots können Sets aus Einflussfaktoren für jede Zielart herausgearbeitet werden (Abbildung 5). Folgende Aussagen kann man aus diesen Sets angelehnt an die Modellergebnisse herausarbeiten:
+# Interpretation der Modelle zu Artenverbreitungen
+Zur Interpretation der Modelle erstellten wir Partielle Abhängigkeitsdiagramme (pdp - Partial-Dependence-Plots), die zeigen, wie einzelne Umweltvariablen die vorhergesagte Wahrscheinlichkeit beeinflussen (Abbidung 3). Die Variablenbedeutung (varimp – variable importance) bestimmten wir über den Anstieg des Modellfehlers (RMSE), wenn einzelne Variablen zufällig durchmischt werden (Abbldung 4). Anhand dieser Plots können Sets aus Einflussfaktoren für jede Zielart herausgearbeitet werden (Abbildung 5). Folgende Aussagen kann man aus diesen Sets angelehnt an die Modellergebnisse herausarbeiten (Abbildung5):
 <ul>
   <li> Das Verbreitungsmodell für den Scharlachkäfer ist besonders sensibel gegenüber (ggü) Totholzmangel und Habitatveränderungen </li>
   <li> Das Verbreitungsmodell für den Hirschkäfer ist sensibel ggü Totholzmangel und Habitatveränderungen, aber ebenso ggü. Wildeinfluss  und fast alle anderen Faktoren (ausgenommen Fragmentierung)</li>
@@ -75,7 +75,24 @@ Zur Interpretation der Modelle erstellten wir Partielle Abhängigkeitsdiagramme 
 </ul>
 
 Diese Ergebnisse sind jedoch mit Vorsicht zu genießen und stellen lediglich Korrelationen, keine Kausalzusammenhänge dar. Auch können Sekundäreffekte nicht ausgeschlossen werden. 
-Modellstatistiken der zwei Modelle geben Aufschluss über die Modellgüte. Dabei zeigt sich das ABC in allen Bereichen eindeutig am robustesten und aussagekräftigsten. Deshalb werden für das Frühwarnsystem vor allem Umweltdaten und die Verbreitungskarten des ABC-Modells dargestellt.
+Modellstatistiken der zwei Modelle geben Aufschluss über die Modellgüte. Dabei zeigt sich das ABC in allen Bereichen eindeutig am robustesten und aussagekräftigsten. Deshalb werden für das Frühwarnsystem vor allem Umweltdaten und die Verbreitungskarten des ABC-Modells dargestellt (außer Cucujus und Triturus).
+
+
+
+Abbildung 2: Verbreitungskarten aller Zielarten basierend auf dem: 
+A)	ABC-Modell der kategorischen Umwelt-Parameter. Dieses Modell konnte nur im Gebiet erstellt werden, wo Feldbegehungen stattgefunden haben. 
+
+  
+B)	Erweiterten Modell der kontinuierlichen Umwelt-Parameter. Hier ist eine Übertragung auf das gesamte Grenzmur-Gebiet möglich
+
+
+Abbildung 3: Variablenimportance partielle Abhängigkeitsdiagramme (pdp – partial dependende plots) der kategorischen Variablen für die Verbreitungswahrscheinlichkeit des Mittelspechts (Leiopicus medius) anhand des ABC-Modell. Die Balken zeigen die Wertebereichen der jeweilige Parameter und deren Einfluss auf die Vorkommenswahrscheinlichkeit der Art an. Habitat grade change - Änderung der Habitatqualität, vertical tree structure  – Vertikalstruktur (P1), Top 5 tree diameter – Vorkommen großer Stammdurchmesser (P2), Deadwood  – Totholz (P3), Tree mixture– Baumartenmischung (P4), IAS canopy – Neophyten auf Kronenniveau (P5), IAS understory  – Bodenvegetation (P6), Browsing– Wildeinfluss/Verbiss (P7), Crown damage – Kronenschaden (P8), natürliche Hydrologie – Natural Hydrologie (P9)
+
+ 
+Abbildung 4: einzelne Variablenbedeutung für die Verbreitungswahrscheinlichkeit des Mittelspechts (Leiopicus) anhand ABC-Modell. Positive Werte bedeuten einen höhere Aussagekraft des Models wenn dieser Parameter vorhanden; bei negativen Werten verliert das Modell an Aussagekaft mit dem Parameter.  Parameter1-Vertikalstruktur, Parameter2-Stammdurchmesser, Parameter3-Totholz, Parameter4-Baumartenmischung, Parameter5-Neophyten, Parameter6-Bodenvegetation, Parameter7-Wildeinfluss, Parameter8-Kronenschaden, Parameter9-Hydrologie, habitatchange - Änderung der Habitatqualität seit den letzten LRT Aufnahmen 2001
+
+ Abbildung 5: Interpretation der Einflüsse der Gefährdungen auf die Zielarten. (“-” kein Einfluss, “X” schwacher Einfluss, “XX” mittlerer Einfluss, “XXX” starker Einfluss).  
+
 
 
 # Veroffentlichungen  der Karten
@@ -83,4 +100,4 @@ Während der Projektlaufzeit wurden die Karten in lokalen Veranstaltungen und Wo
 https://www.nukv.at/riskmaps/
 
 # Datenschutzrichtlinien
-Die Verwendung der Karten läuft über den INSPIRE Kartendienst des Land-, forst- und wasserwirtschaftlichen Rechenzentrums (LFRZ). Die Daten sind öffentlich zugänglich. Gemäß § 4 BDSG muss jeder Seitenbesucher über die Erhebung seiner personenbezogenen Daten informiert werden. Hierfür ist eine Datenschutzerklärung notwendig. Diese wird bei der Nutzung der Website integriert.
+Die Verwendung der Karten läuft über den INSPIRE Kartendienst des Land-, forst- und wasserwirtschaftlichen Rechenzentrums (LFRZ). Die Daten sind öffentlich zugänglich. Gemäß der [DSGVO Artikel 13](https://dsgvo-gesetz.de/art-13-dsgvo/) gibt es EU-weit eine Informationspflicht bei Erhebung von personenbezogenen Daten bei der betroffenen Person. Folglich muss jeder Seitenbesucher/jede Sitenbesucherin über die Erhebung seiner/ihrer personenbezogenen Daten informiert werden. Hierfür ist eine Datenschutzerklärung notwendig. Ein Verweis dazu wird bei der Nutzung der Website integriert. [LFRZ Datenschutzhinweis](https://www.lfrz.gv.at/dam/jcr:9a978b62-0af7-4fac-8f82-a63c0ef21c29/LFRZ_Allgemeine_Datenschutzhinweise_V2.0_1.9.2025.pdf)
