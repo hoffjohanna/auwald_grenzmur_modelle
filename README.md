@@ -35,21 +35,6 @@ Es wurden verschiedene Random-Forest Modellierungen durchgeführt basierend auf 
 
 Die Methodik der Verbreitungskarten ist angelehnt an die Arbeiten von [Paź-Dyderska et al. (2020)](https://doi.org/10.1016/j.ufug.2020.126868). Für alle Analysen nutzten wir R (Version 3.5.3). Um die Verbreitungskarten der 6 Zielarten im Projektgebiet zu modellieren, verwendeten wir einen Random-Forest-Algorithmus. Hier werden Vorkommenswahrscheinlichkeiten jeder Art anhand der Zusammensetzung an (für die Art günstigen und ungünstigen) Umweltfaktoren berechnet. Dieses Verfahren eignet sich besser, weil manche positiven Nachweise der seltenen Arten (hier vor allem Grauspecht und Gelbbauchunke) im Gebiet sehr gering waren und klassische Modelle (z. B. logistische Regression) dadurch stärker verzerrt würden. Random Forest kann außerdem komplexe Zusammenhänge zwischen Variablen gut abbilden. Die Ergebnisse dieser Modellierung sind Verbreitungskarten der Zielarten sowohl für das ABC-Modell mit den kategoriellen Daten, als auch das erweiterte Modell mit den kontinuierlichen Parametern. Anhand von Statistiken wie (pdp plots - partial dependency) und Variablen Einfluss (varimp) konnten die wichtigsten Einflussparameter identifiziert und als "Risikokarten" sichtbar gemacht werden.
 
-##### Parameter zur Habitatstruktur (ABC Modell)
-P0-Zustandsveränderung der Habitatqualität (Vergleich zwischen 2003 und 2019)
-P1-Vertikalstruktur   
-P2-Stammdurchmesser  
-P3-Totholz  
-##### Parameter zur Artenzusammensetzung
-P4-Baumartenmischung  
-P5-Neophyten  
-P6-Bodenvegetation  
-##### Parameter zu Störungen
-P7-Wildeinfluss  
-P8-Kronenschaden  
-P9-Hydrologie  
-
-
 ### 2) Risikokarten 
 Die Erstellung der Risikokarten und Arten-Verbreitungskarten im Projektgebiet erfolgte mit den Datengrundlagen der Feldaufnahmen vom Ökoteam (AP5 Datenerhebung). Dort fand ein Monitoring der 6 Zielarten, als auch der Umweltparameter (siehe oben; Habitatstruktur, Artenzusammensetzung, Störungen) statt. Diese dienten als Input-Grundlage für die Modellierungen der Verbreitungskarten, ebenso die Grundlage für die Risikokarten. Die Parameter, die im Modell und den Statistiken dazu den höchsten Einluss auf die Verbreitungswahrscheinlichkeit der Zielarten hatten, wurden als Risikoparameter dargestellt.
 
