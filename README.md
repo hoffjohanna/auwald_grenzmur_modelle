@@ -15,9 +15,9 @@ Gelbbauchunke - Bombina variegata
 Die Entwicklung eines Frühwarnsystems zur frühzeitigen Erkennung potenzieller Gefährdungen für die Biodiversität des Auwalds wurde eingeleitet. Ein Startpunkt lag auf der Recherche und systematischen Analyse der Habitatansprüche ausgewählter Zeigerarten durch das Bundesforschungszentrum für Wald - [BFW](https://www.bfw.gv.at/). Diese Analyse bildet die Grundlage für eine vorausschauende Planung von Schutzmaßnahmen sowie für das Monitoring der biologischen Vielfalt in der Projektregion das Natura2000 Schutzgebiet "Auwald an der Grenzmur" in der Süd-Steiermark. Für jede dieser Arten wurden die ökologischen Anforderungskategorien wie Lebensraum, Nahrungsangebot, Waldstruktur und artspezifische Merkmale analysiert. 
 
 Die Erstellung der Risikokarten und Arten-Verbreitungskarten im Projektgebiet erfolgte mit den Datengrundlagen der Feldaufnahmen vom [Ökoteam](https://www.oekoteam.at/de/) (AP5 Datenerhebung) in den Jahren 2024, 2025. Dort fand ein Monitoring der 6 Zielarten, als auch der Umweltparameter statt. Diese dienten als Input-Grundlage für die Modellierungen (Verbreitungskarten mit ABC Modell und Risikokarten) und wurden von Beobachtungsdaten von GBIF und weiteren Umweltdaten als Geographische Umweltdaten (GIS) erweitert (Verbreiungsdaten mit erweitertem Modell). Die Outputs bzw. Ergebnisse der Modellierungen werden in Form von Karten (Risikokarten und Verbreitungskarten) im Frühwarnsystem genutzt.
-
+[Abbildung 1 hier öffnen](figures/Abbildung1.png)
 ![Abbildung1](Abbildung1.png)
-Abbildung 1: Schema zur Modellierung im Rahmen des Arbeitspakets 6: links sind als Dateninputs die Umweltparameter und die Artenbeobachtungen dargestellt und rechts die Ergebnisse in Form von Risiko- und Verbreitungskarten. Die Umweltparameter setzten sich zusammen aus Felderhebungen (kategorische Parameter) und zusätzlichen GIS-Daten (kontinuierliche Parameter), die für die Region gesammelt wurden. 
+<br>*Abbildung 1: Schema zur Modellierung im Rahmen des Arbeitspakets 6: links sind als Dateninputs die Umweltparameter und die Artenbeobachtungen dargestellt und rechts die Ergebnisse in Form von Risiko- und Verbreitungskarten. Die Umweltparameter setzten sich zusammen aus Felderhebungen (kategorische Parameter) und zusätzlichen GIS-Daten (kontinuierliche Parameter), die für die Region gesammelt wurden.*
 
 Modellierungen wurde durchgeführt, um folgende Fragen zu beantworten:
 <ul>
@@ -82,21 +82,17 @@ Modellstatistiken der zwei Modelle geben Aufschluss über die Modellgüte. Dabei
 
 
 
-Abbildung 2: Verbreitungskarten aller Zielarten basierend auf dem: 
-![Abbildung2A_Map_ABCprob_continuous](Abbildung2A_Map_ABCprob_continuous.png)
-A)	ABC-Modell der kategorischen Umwelt-Parameter. Dieses Modell konnte nur im Gebiet erstellt werden, wo Feldbegehungen stattgefunden haben. 
+*Abbildung 2: Verbreitungskarten aller Zielarten basierend auf dem:*<br> 
+*[Abbildung 2A](Abbildung2A_Map_ABCprob_continuous.png): ABC-Modell der kategorischen Umwelt-Parameter. Dieses Modell konnte nur im Gebiet erstellt werden, wo Feldbegehungen stattgefunden haben.*
 
-![Abbildung2B_Map_contpredictors_Continuous](Abbildung2B_Map_contpredictors_Continuous.png)  
-B)	Erweiterten Modell der kontinuierlichen Umwelt-Parameter. Hier ist eine Übertragung auf das gesamte Grenzmur-Gebiet möglich
+*[Abbildung 2B](Abbildung2B_Map_contpredictors_Continuous.png): Erweiterten Modell der kontinuierlichen Umwelt-Parameter. Hier ist eine Übertragung auf das gesamte Grenzmur-Gebiet möglich.*
 
-![Abbildung3_leiopicus.abc.rf_pdp](Abbildung3_leiopicus.abc.rf_pdp.png)
-Abbildung 3: Variablenimportance partielle Abhängigkeitsdiagramme (pdp – partial dependende plots) der kategorischen Variablen für die Verbreitungswahrscheinlichkeit des Mittelspechts (Leiopicus medius) anhand des ABC-Modell. Die Balken zeigen die Wertebereichen der jeweilige Parameter und deren Einfluss auf die Vorkommenswahrscheinlichkeit der Art an. Habitat grade change - Änderung der Habitatqualität, vertical tree structure  – Vertikalstruktur (P1), Top 5 tree diameter – Vorkommen großer Stammdurchmesser (P2), Deadwood  – Totholz (P3), Tree mixture– Baumartenmischung (P4), IAS canopy – Neophyten auf Kronenniveau (P5), IAS understory  – Bodenvegetation (P6), Browsing– Wildeinfluss/Verbiss (P7), Crown damage – Kronenschaden (P8), natürliche Hydrologie – Natural Hydrologie (P9)
+*[Abbildung 3](Abbildung3_leiopicus.abc.rf_pdp.png): Variablenimportance partielle Abhängigkeitsdiagramme (pdp – partial dependende plots) der kategorischen Variablen für die Verbreitungswahrscheinlichkeit des Mittelspechts (Leiopicus medius) anhand des ABC-Modell. Die Balken zeigen die Wertebereichen der jeweilige Parameter und deren Einfluss auf die Vorkommenswahrscheinlichkeit der Art an. Habitat grade change - Änderung der Habitatqualität, vertical tree structure  – Vertikalstruktur (P1), Top 5 tree diameter – Vorkommen großer Stammdurchmesser (P2), Deadwood  – Totholz (P3), Tree mixture– Baumartenmischung (P4), IAS canopy – Neophyten auf Kronenniveau (P5), IAS understory  – Bodenvegetation (P6), Browsing– Wildeinfluss/Verbiss (P7), Crown damage – Kronenschaden (P8), natürliche Hydrologie – Natural Hydrologie (P9)*
 
-![Abbildung4_leiopicus.abc.rf_varimp](Abbildung4_leiopicus.abc.rf_varimp.png)
-Abbildung 4: einzelne Variablenbedeutung für die Verbreitungswahrscheinlichkeit des Mittelspechts (Leiopicus) anhand ABC-Modell. Positive Werte bedeuten einen höhere Aussagekraft des Models wenn dieser Parameter vorhanden; bei negativen Werten verliert das Modell an Aussagekaft mit dem Parameter.  Parameter1-Vertikalstruktur, Parameter2-Stammdurchmesser, Parameter3-Totholz, Parameter4-Baumartenmischung, Parameter5-Neophyten, Parameter6-Bodenvegetation, Parameter7-Wildeinfluss, Parameter8-Kronenschaden, Parameter9-Hydrologie, habitatchange - Änderung der Habitatqualität seit den letzten LRT Aufnahmen 2001
+*[Abbildung 4](Abbildung4_leiopicus.abc.rf_varimp.png): Abbildung 4: einzelne Variablenbedeutung für die Verbreitungswahrscheinlichkeit des Mittelspechts (Leiopicus) anhand ABC-Modell. Positive Werte bedeuten einen höhere Aussagekraft des Models wenn dieser Parameter vorhanden; bei negativen Werten verliert das Modell an Aussagekaft mit dem Parameter.  Parameter1-Vertikalstruktur, Parameter2-Stammdurchmesser, Parameter3-Totholz, Parameter4-Baumartenmischung, Parameter5-Neophyten, Parameter6-Bodenvegetation, Parameter7-Wildeinfluss, Parameter8-Kronenschaden, Parameter9-Hydrologie, habitatchange - Änderung der Habitatqualität seit den letzten LRT Aufnahmen 2001*
 
 ![Abbildung5_Model2_Risks_Species_Overview](Abbildung5_Model2_Risks_Species_Overview.png)
- Abbildung 5: Interpretation der Einflüsse der Gefährdungen auf die Zielarten. (“0” kein nachweisbarer Einfluss, “X” schwacher Einfluss, “XX” mittlerer Einfluss, “XXX” starker Einfluss). Die Sternchen zeigen die Modelgüte des ABC Models, sowie des kontinuierlichen Models.
+<br>*Abbildung 5: Interpretation der Einflüsse der Gefährdungen auf die Zielarten. (“0” kein nachweisbarer Einfluss, “X” schwacher Einfluss, “XX” mittlerer Einfluss, “XXX” starker Einfluss). Die Sternchen zeigen die Modelgüte des ABC Models, sowie des kontinuierlichen Models.*
 
 
 
